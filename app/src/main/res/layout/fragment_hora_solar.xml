@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HoraSolarFragment">
+
+
+    <DatePicker
+
+        android:id="@+id/calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></DatePicker>
+
+    <!--<com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/textLatitud"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        android:hint="Latitud"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/latitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/textLongitud"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="Longitud"
+        app:layout_constraintStart_toEndOf="@+id/textLatitud"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/longitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/textJuliano"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="Dia"
+        app:layout_constraintStart_toEndOf="@+id/textLongitud"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/juliano"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/textHoraSalida"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:hint="Salida del Sol"
+        app:layout_constraintStart_toStartOf="@+id/calendar"
+        app:layout_constraintTop_toBottomOf="@+id/textLatitud">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/horaSalida"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/textHoraPuesta"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:hint="Puesta del Sol: "
+
+        app:layout_constraintStart_toEndOf="@+id/textHoraSalida"
+        app:layout_constraintTop_toBottomOf="@+id/textJuliano">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/horaPuesta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/textDuracion"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:hint="Duración del día: "
+
+        app:layout_constraintStart_toEndOf="@+id/textHoraPuesta"
+        app:layout_constraintTop_toBottomOf="@+id/textJuliano">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/duracion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Día Juliano"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/diaJuliano"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/fjalla_one"
+        android:text=""
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/secondaryColor"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textDeclinacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decinación"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/diaJuliano">
+
+    </TextView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="Exportar a Excel"
+        app:showAsAction="never" />
+    <group
+        android:id="@+id/group_one">
+        <item android:title="Granularidad">
+            <menu>
+                <item
+                    android:id="@+id/gran1"
+                    android:title="1 min"/>
+                <item
+                    android:id="@+id/gran5"
+                    android:title="5 min"/>
+                <item
+                    android:id="@+id/gran10"
+                    android:title="10 min"/>
+            </menu>
+        </item>
+    </group>
+</menu>

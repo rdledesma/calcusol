@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/indexFragment">
+    <fragment
+        android:id="@+id/indexFragment"
+        android:name="com.example.calcusol.IndexFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_index" />
+
+
+
+    <fragment
+        android:id="@+id/horaSolarFragment"
+        android:name="com.example.calcusol.HoraSolarFragment"
+        android:label="Fecha de cálculo"
+        tools:layout="@layout/fragment_hora_solar" />
+
+    <fragment
+        android:id="@+id/irradianciaFragment"
+        android:name="com.example.calcusol.IrradianciaFragment"
+        android:label="Irradiancias sobre planos"
+        tools:layout="@layout/fragment_irradiancia" />
+    <fragment
+        android:id="@+id/resultadosFragment"
+        android:name="com.example.calcusol.ResultadosFragment"
+        android:label="Resultados"
+        tools:layout="@layout/fragment_resultados" />
+</navigation>

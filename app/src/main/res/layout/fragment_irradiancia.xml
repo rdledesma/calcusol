@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IrradianciaFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLatitud"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        android:hint="Latitud"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/latitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLongitud"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="Longitud"
+        app:layout_constraintStart_toEndOf="@+id/textLatitud"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/longitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textJuliano"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="Dia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textLongitud"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/juliano"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textBeta"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        app:hintTextColor="@color/secondaryColor"
+        android:textColorHint="@color/secondaryColor"
+        android:hint="Beta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLatitud">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:textColor="@color/secondaryColor"
+            android:id="@+id/beta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textGamma"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="Gamma"
+        app:hintTextColor="@color/secondaryColor"
+        android:textColorHint="@color/secondaryColor"
+        app:layout_constraintStart_toEndOf="@+id/textBeta"
+        app:layout_constraintTop_toBottomOf="@+id/textLatitud">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/gamma"
+            android:textColor="@color/secondaryColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textGmt"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="GMT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textGamma"
+        app:layout_constraintTop_toBottomOf="@+id/textLatitud">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/gmt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/debugCosTitaZero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/grafica">
+
+    </TextView>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/debugCosTita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/debugCosTitaZero"
+        tools:layout_editor_absoluteX="55dp">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/horaLocalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hora local"
+        app:layout_constraintBottom_toTopOf="@+id/grafica"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/debugCosTita"
+        app:layout_constraintTop_toBottomOf="@+id/textGamma">
+
+    </TextView>
+
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/grafica"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textGamma" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

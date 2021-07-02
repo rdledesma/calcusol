@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/indexFragment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/horaSolarFragment"
+            android:icon="@drawable/ic_baseline_calendar_today_24"
+            android:title="Fecha de cálculo" />
+        <item
+            android:id="@+id/irradianciaFragment"
+            android:icon="@drawable/ic_baseline_wb_sunny_24"
+            android:title="Irradiancias sobre planos" />
+        <item
+            android:id="@+id/resultadosFragment"
+            android:icon="@drawable/ic_baseline_grading_24"
+            android:title="Resultados" />
+
+    </group>
+</menu>
