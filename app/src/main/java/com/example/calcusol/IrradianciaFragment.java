@@ -313,7 +313,7 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
         double sumInclinado=0;
         double sumParalelo=0;
 
-
+        Double LONG =  Double.parseDouble(String.valueOf(longitud.getText()));
 
 
         for (double i = 0; i <count; i=i+(0.01666666667 * constGranularity)) {
@@ -331,6 +331,28 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
 
             sumInclinado = sumInclinado + valInclinado;
             sumParalelo = sumParalelo + val;
+
+
+            if(LONG>=0){
+                if(getCosTitaZero(i)<0 && getCosTitaZero(i+(0.01666666667 * constGranularity))>=0){
+                    editor.putString(getString(R.string.saved_amanercer), ""+ i);
+                }
+
+                if(getCosTitaZero(i)>0 && getCosTitaZero(i+(0.01666666667 * constGranularity))<=0){
+                    editor.putString(getString(R.string.saved_ocaso), ""+ i);
+                }
+            }
+            else{
+                if(getCosTitaZero(i)>0 && getCosTitaZero(i+(0.01666666667 * constGranularity))<=0){
+                    editor.putString(getString(R.string.saved_amanercer), ""+i);
+                }
+                if(getCosTitaZero(i)<0 && getCosTitaZero(i+(0.01666666667 * constGranularity))>=0){
+                    editor.putString(getString(R.string.saved_ocaso), ""+i);
+                }
+            }
+
+
+
 
 
 
@@ -829,7 +851,7 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
         }
     }
 
-    private double getSalidaSol(){
+    /*private double getSalidaSol(){
         DiaJuliano =  Integer.parseInt(String.valueOf(diaJuliano.getText()));
         double LAT = -36.03;
         double LONG = 59.1;
@@ -874,16 +896,17 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
 
         return resulttsof;
 
-    }
+    }*/
 
 
-    private double duracionDia(){
+   /* private double duracionDia(){
         return getPuestaSol() - getSalidaSol();
-    }
+    }*/
 
 
     private double mediodiaSolar(){
         return 12-getHoraSolar(0);
+        //return getHoraSolar(0);
     }
 
 

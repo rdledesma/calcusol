@@ -28,4 +28,14 @@
         android:name="com.example.calcusol.ResultadosFragment"
         android:label="Resultados"
         tools:layout="@layout/fragment_resultados" />
+    <fragment
+        android:id="@+id/manualFragment"
+        android:name="com.example.calcusol.ManualFragment"
+        android:label="fragment_manual"
+        tools:layout="@layout/fragment_manual" />
+    <fragment
+        android:id="@+id/descargasFragment"
+        android:name="com.example.calcusol.DescargasFragment"
+        android:label="fragment_descargas"
+        tools:layout="@layout/fragment_descargas" />
 </navigation>

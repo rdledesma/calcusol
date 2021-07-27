@@ -275,7 +275,7 @@ public class HoraSolarFragment extends Fragment {
         return truncate(result);
     }
 
-    private double getSalidaSol(){
+    /*private double getSalidaSol(){
         int DiaJuliano =  Integer.parseInt(String.valueOf(dia.getText()));
 
 
@@ -325,12 +325,12 @@ public class HoraSolarFragment extends Fragment {
 
         return resulttsof;
 
-    }
+    }*/
 
 
-    private double duracionDia(){
+    /*private double duracionDia(){
         return getPuestaSol() - getSalidaSol();
-    }
+    }*/
 
 
 

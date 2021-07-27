@@ -20,4 +20,6 @@
     <string name="saved_mediodia">mediodia solar</string>
     <string name="saved_rb">Rb mediodia solar</string>}
     <string name="saved_max_altura">Max altura</string>
+    <string name="saved_amanercer">Amanecer</string>
+    <string name="saved_ocaso">Ocaso</string>
 </resources>

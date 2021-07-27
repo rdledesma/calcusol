@@ -21,5 +21,17 @@
             android:icon="@drawable/ic_baseline_grading_24"
             android:title="Resultados" />
 
+        <item
+            android:id="@+id/descargasFragment"
+            android:icon="@drawable/ic_baseline_grading_24"
+            android:title="Descargas"
+            />
+
+        <item
+            android:id="@+id/manualFragment"
+            android:icon="@drawable/ic_baseline_grading_24"
+            android:title="Descargas"
+        />
+
     </group>
 </menu>
