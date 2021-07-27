@@ -1,12 +1,32 @@
 package com.example.calcusol;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.FileProvider;
+import androidx.core.content.MimeTypeFilter;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.calcusol.adapters.FilesAdapter;
+
+import org.apache.poi.ss.formula.functions.T;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,33 +35,17 @@ import android.view.ViewGroup;
  */
 public class DescargasFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ListView listView;
 
     public DescargasFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DescargasFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DescargasFragment newInstance(String param1, String param2) {
+
+    public static DescargasFragment newInstance() {
         DescargasFragment fragment = new DescargasFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,16 +53,83 @@ public class DescargasFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_descargas, container, false);
+
+        View root =  inflater.inflate(R.layout.fragment_descargas, container, false);
+
+        listView = root.findViewById(R.id.list_items);
+
+
+        String path = Environment.getExternalStorageDirectory().toString()+"/CALCUSOL";
+
+        if (Build.VERSION_CODES.R > Build.VERSION.SDK_INT) {
+            path = Environment.getExternalStorageDirectory().getPath()+"//CALCUSOL";
+
+        } else {
+            path = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).getPath()+ "//CALCUSOL";
+        }
+
+
+
+
+
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+
+
+
+
+        ArrayList<File> archivos = new ArrayList<>();
+
+        for (int i = 0; i < files.length; i++)
+        {
+            Log.d("Files", "FileName:" + files[i].getName());
+            archivos.add(files[i]);
+
+        }
+
+        if(archivos!=null){
+            final FilesAdapter customAdapter = new FilesAdapter(getContext(), archivos);
+            listView.setAdapter(customAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    File item = (File) customAdapter.getItem(i);
+
+
+
+
+
+
+                    Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName()+".provider", item);
+
+
+                    String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(item).toString());
+                    String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+
+                    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                    sendIntent.setDataAndType(fileUri, mimetype);
+                    sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    getContext().startActivity(sendIntent);
+
+                }
+            });
+        }
+
+
+
+
+        return root;
     }
 }

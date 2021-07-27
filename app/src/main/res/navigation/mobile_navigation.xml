@@ -31,11 +31,11 @@
     <fragment
         android:id="@+id/manualFragment"
         android:name="com.example.calcusol.ManualFragment"
-        android:label="fragment_manual"
+        android:label="Manual"
         tools:layout="@layout/fragment_manual" />
     <fragment
         android:id="@+id/descargasFragment"
         android:name="com.example.calcusol.DescargasFragment"
-        android:label="fragment_descargas"
+        android:label="Descargas"
         tools:layout="@layout/fragment_descargas" />
 </navigation>

@@ -1,14 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/frame"
+    android:padding="8dp"
+    android:background="@drawable/gradient_list"
     tools:context=".ManualFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Podrá acceder al menú de la aplicación presionando en el icóno de la esquina superiror izquierda."
+                />
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Fecha de cálculo: Debe seleccionar en el calendario el día respecto al cuál realizará los cálculos. "
+                />
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Irradiancia sobre planos: Dada latitud y longitud (en grados ), GMT, y con el día juliando elegido en la pantalla Fecha de cálculo, muestra la irradiancia paralelo al piso."
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Indicando Beta y Gamma de un plano, podrá ver la irradiancia sobre un plano con tales caraterísticas."
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Posicionado en ésta pantalla (Isp), presionando en el icono superior izquierdo podrá seleccionar la granularidad de la gráfica."
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Posicionado en ésta pantalla (Isp), presionando en el icono superior izquierdo podrá seleccionar exportar los datos obtenidos a un archivo de excel."
+                />
+
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Resultados: Podrá observar, información anexada, en base a los datos de entrada de las plantallas anteriores."
+                />
+
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fjalla_one"
+                android:includeFontPadding="false"
+                android:textSize="20dp"
+                android:text="Descargas: Los archivos descargados pueden ser accedidos desde la lista que se muestra en ésta pantalla. Para poder abrir estos archivos debe contar con una aplicación instalada que permita procesar archivos xls. Recomendamos usar Microsoft Office disponible en la play store. "
+                />
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+
+
+
+
 
 </FrameLayout>
