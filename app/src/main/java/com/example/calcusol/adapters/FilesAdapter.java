@@ -11,19 +11,26 @@ import com.example.calcusol.R;
 import com.example.calcusol.models.Archivo;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FilesAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<File> archivos;
 
+    public FilesAdapter (){
+
+    }
 
 
     public FilesAdapter (Context context, ArrayList<File> archivos){
         this.context = context;
         this.archivos = archivos;
     }
+
+
 
 
     @Override
@@ -50,13 +57,14 @@ public class FilesAdapter extends BaseAdapter {
         v= layoutInflater.inflate(R.layout.item_list, null);
         // Valor actual según la posición
         File currentFile  = archivos.get(position);
-
-
-        TextView item;
+        TextView item, fecha;
 
         item = v.findViewById(R.id.fileId);
-
+        fecha = v.findViewById(R.id.Fecha);
         item.setText(currentFile.getName());
+        Date createdAt = new Date(currentFile.lastModified());
+        fecha.setText(""+ DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(createdAt));
+
 
 
         //Devolvemos la vista inflada

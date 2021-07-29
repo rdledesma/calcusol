@@ -32,6 +32,9 @@ public class ResultadosFragment extends Fragment {
     String mediodiaSaved;
     String rbSaved;
     String maxAltura;
+    Double savedAmanecer, savedOcaso;
+
+
     public ResultadosFragment() {
         // Required empty public constructor
     }
@@ -79,18 +82,20 @@ public class ResultadosFragment extends Fragment {
         rbSaved = sharedPref.getString(getString(R.string.saved_rb), "0.0");
         maxAltura = sharedPref.getString(getString(R.string.saved_max_altura), "0.0");
 
+        savedAmanecer = Double.parseDouble(sharedPref.getString(getString(R.string.saved_amanercer), "0"));
+        savedOcaso = Double.parseDouble(sharedPref.getString(getString(R.string.saved_ocaso), "0"));
 
         diaJuliano.setText(diaSaved);
         lat.setText(latitudSaved+"°");
         longitud.setText(longitudSaved+"°");
         gmt.setText(savedGMT);
 
-        amanecer.setText(parseToTime(getSalidaSol())+"hs");
-        ocaso.setText(parseToTime(getPuestaSol())+"hs");
-        duracion.setText(parseToTime(getPuestaSol()- getSalidaSol())+"hs");
+        amanecer.setText(parseToTime(savedAmanecer)+" hs");
+        ocaso.setText(parseToTime(savedOcaso)+" hs");
+        duracion.setText(parseToTime(savedOcaso-savedAmanecer)+" hs");
 
         razon.setText(razonSaved);
-        mediodia.setText(mediodiaSaved);
+        mediodia.setText(mediodiaSaved+ "hs");
         rb.setText(rbSaved);
         altura.setText(maxAltura+"°");
 

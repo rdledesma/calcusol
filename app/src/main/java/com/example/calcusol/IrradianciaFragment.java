@@ -333,7 +333,7 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
             sumParalelo = sumParalelo + val;
 
 
-            if(LONG>=0){
+            if(LONG<=0){
                 if(getCosTitaZero(i)<0 && getCosTitaZero(i+(0.01666666667 * constGranularity))>=0){
                     editor.putString(getString(R.string.saved_amanercer), ""+ i);
                 }

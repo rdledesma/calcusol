@@ -36,6 +36,8 @@ import static android.os.Environment.DIRECTORY_DOCUMENTS;
 public class DescargasFragment extends Fragment {
 
     private ListView listView;
+    private ArrayList<File> archivos = new ArrayList<>();
+    private FilesAdapter customAdapter = new FilesAdapter();
 
     public DescargasFragment() {
         // Required empty public constructor
@@ -60,43 +62,82 @@ public class DescargasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root =  inflater.inflate(R.layout.fragment_descargas, container, false);
+        View root = inflater.inflate(R.layout.fragment_descargas, container, false);
 
         listView = root.findViewById(R.id.list_items);
 
+        customAdapter = new FilesAdapter(getContext(), archivos);
 
-        String path = Environment.getExternalStorageDirectory().toString()+"/CALCUSOL";
+
+        cargarArchivos();
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                File item = (File) customAdapter.getItem(i);
+
+
+                Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", item);
+
+
+                String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(item).toString());
+                String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setDataAndType(fileUri, mimetype);
+                sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                getContext().startActivity(sendIntent);
+
+            }
+        });
+
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                File item = (File) customAdapter.getItem(i);
+                item.delete();
+
+                cargarArchivos();
+
+                return false;
+            }
+        });
+
+
+        return root;
+    }
+
+
+    private void cargarArchivos() {
+        archivos.clear();
+
+
+        String path = Environment.getExternalStorageDirectory().toString() + "/CALCUSOL";
 
         if (Build.VERSION_CODES.R > Build.VERSION.SDK_INT) {
-            path = Environment.getExternalStorageDirectory().getPath()+"//CALCUSOL";
+            path = Environment.getExternalStorageDirectory().getPath() + "//CALCUSOL";
 
         } else {
-            path = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).getPath()+ "//CALCUSOL";
+            path = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).getPath() + "//CALCUSOL";
         }
 
 
-
-
-
-        Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
 
 
-
-
-        ArrayList<File> archivos = new ArrayList<>();
-
-        for (int i = 0; i < files.length; i++)
-        {
-            Log.d("Files", "FileName:" + files[i].getName());
+        for (int i = 0; i < files.length; i++) {
             archivos.add(files[i]);
-
         }
 
-        if(archivos!=null){
-            final FilesAdapter customAdapter = new FilesAdapter(getContext(), archivos);
+        if (archivos != null) {
+
             listView.setAdapter(customAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -105,11 +146,7 @@ public class DescargasFragment extends Fragment {
                     File item = (File) customAdapter.getItem(i);
 
 
-
-
-
-
-                    Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName()+".provider", item);
+                    Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", item);
 
 
                     String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(item).toString());
@@ -126,10 +163,5 @@ public class DescargasFragment extends Fragment {
                 }
             });
         }
-
-
-
-
-        return root;
     }
 }
