@@ -32,6 +32,10 @@
             android:icon="@drawable/ic_baseline_info_24"
             android:title="Manual"
         />
-
+        <!--<item
+            android:id="@+id/main2"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Modo Deslizamiento"
+            />-->
     </group>
 </menu>

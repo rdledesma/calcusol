@@ -154,7 +154,7 @@ public class HoraSolarFragment extends Fragment {
 
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.saved_high_score_key), ""+days);
+                editor.putString(getString(R.string.saved_dia), ""+days);
                 editor.commit();
             }
         });
@@ -206,8 +206,6 @@ public class HoraSolarFragment extends Fragment {
             }
         });*/
 
-
-        
 
         return view;
     }

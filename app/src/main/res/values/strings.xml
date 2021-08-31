@@ -13,6 +13,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="saved_high_score_key">Hello blank fragment</string>
+    <string name="saved_dia">Dia</string>
     <string name="saved_longitud">Longitud</string>
     <string name="saved_latitud">Latitud</string>
     <string name="saved_gmt">gmt</string>
@@ -25,4 +26,7 @@
 
 
     <string name="square_root_symbol">\u221a</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

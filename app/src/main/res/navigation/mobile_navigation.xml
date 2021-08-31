@@ -38,4 +38,11 @@
         android:name="com.example.calcusol.DescargasFragment"
         android:label="Descargas"
         tools:layout="@layout/fragment_descargas" />
+
+    <activity
+        android:id="@+id/main2"
+        android:name="com.example.calcusol.MainActivity2"
+        android:label="Modo Deslizamiento"
+        tools:layout="@layout/activity_main2" />
+
 </navigation>

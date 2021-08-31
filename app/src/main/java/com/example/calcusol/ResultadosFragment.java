@@ -73,7 +73,7 @@ public class ResultadosFragment extends Fragment {
         altura = view.findViewById(R.id.tvAltura);
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        diaSaved = sharedPref.getString(getString(R.string.saved_high_score_key), "1");
+        diaSaved = sharedPref.getString(getString(R.string.saved_dia), "1");
         longitudSaved = sharedPref.getString(getString(R.string.saved_longitud), "59.1");
         latitudSaved = sharedPref.getString(getString(R.string.saved_latitud), "-36.03");
         savedGMT = sharedPref.getString(getString(R.string.saved_gmt), "-3");
@@ -208,5 +208,51 @@ public class ResultadosFragment extends Fragment {
 
         return resulttsof;
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            diaSaved = sharedPref.getString(getString(R.string.saved_dia), "1");
+            longitudSaved = sharedPref.getString(getString(R.string.saved_longitud), "59.1");
+            latitudSaved = sharedPref.getString(getString(R.string.saved_latitud), "-36.03");
+            savedGMT = sharedPref.getString(getString(R.string.saved_gmt), "-3");
+            razonSaved = sharedPref.getString(getString(R.string.saved_razon_irradiancia), "0.0");
+            mediodiaSaved = sharedPref.getString(getString(R.string.saved_mediodia), "0.0");
+            rbSaved = sharedPref.getString(getString(R.string.saved_rb), "0.0");
+            maxAltura = sharedPref.getString(getString(R.string.saved_max_altura), "0.0");
+
+            savedAmanecer = Double.parseDouble(sharedPref.getString(getString(R.string.saved_amanercer), "0"));
+            savedOcaso = Double.parseDouble(sharedPref.getString(getString(R.string.saved_ocaso), "0"));
+
+            diaJuliano.setText(diaSaved);
+            lat.setText(latitudSaved+"°");
+            longitud.setText(longitudSaved+"°");
+            gmt.setText(savedGMT);
+
+            amanecer.setText(parseToTime(savedAmanecer)+" hs");
+            ocaso.setText(parseToTime(savedOcaso)+" hs");
+            duracion.setText(parseToTime(savedOcaso-savedAmanecer)+" hs");
+
+            razon.setText(razonSaved);
+            mediodia.setText(mediodiaSaved+ "hs");
+            rb.setText(rbSaved);
+            altura.setText(maxAltura+"°");
+
+
+            if (getFragmentManager() != null) {
+
+                getFragmentManager()
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit();
+            }
+        }
     }
 }

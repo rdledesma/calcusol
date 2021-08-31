@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Environment;
 import android.text.Html;
@@ -128,9 +130,13 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
@@ -156,12 +162,13 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
         grafica = view.findViewById(R.id.grafica);
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String highScore = sharedPref.getString(getString(R.string.saved_high_score_key), "1");
+        //String highScore = sharedPref.getString(getString(R.string.saved_high_score_key), "1");
+        String diaSaved = sharedPref.getString(getString(R.string.saved_dia), "1");
         String longitudSaved = sharedPref.getString(getString(R.string.saved_longitud), "0");
         String latitudSaved = sharedPref.getString(getString(R.string.saved_latitud), "0");
         String gmtSaved = sharedPref.getString(getString(R.string.saved_gmt), "0");
 
-        diaJuliano.setText(highScore);
+        diaJuliano.setText(diaSaved);
         gmt.setText(gmtSaved);
         latitud.setText(latitudSaved);
         longitud.setText(longitudSaved);
@@ -184,7 +191,7 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
                     setDataParalelo(24);
                     SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(getString(R.string.saved_high_score_key), ""+diaJuliano.getText());
+                    editor.putString(getString(R.string.saved_dia), ""+diaJuliano.getText());
                     editor.commit();
                 }
 
@@ -1106,6 +1113,38 @@ public class IrradianciaFragment extends Fragment implements ExportModal.OnInput
     }
 
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            //String highScore = sharedPref.getString(getString(R.string.saved_high_score_key), "1");
+            String diaSaved = sharedPref.getString(getString(R.string.saved_dia), "1");
+            String longitudSaved = sharedPref.getString(getString(R.string.saved_longitud), "0");
+            String latitudSaved = sharedPref.getString(getString(R.string.saved_latitud), "0");
+            String gmtSaved = sharedPref.getString(getString(R.string.saved_gmt), "0");
+
+            diaJuliano.setText(diaSaved);
+            gmt.setText(gmtSaved);
+            latitud.setText(latitudSaved);
+            longitud.setText(longitudSaved);
+            beta.setText("0");
+            gamma.setText("0");
+
+            if (getFragmentManager() != null) {
+
+                getFragmentManager()
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit();
+            }
+        }
+    }
 
 }
 

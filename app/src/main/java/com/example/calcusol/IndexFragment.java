@@ -2,6 +2,8 @@ package com.example.calcusol;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -59,6 +61,8 @@ public class IndexFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
     }
 
     @Override
@@ -79,7 +83,16 @@ public class IndexFragment extends Fragment {
 
 
 
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.saved_latitud), ""+0);
+        editor.putString(getString(R.string.saved_longitud), ""+0);
+        editor.putString(getString(R.string.saved_dia), ""+1);
+        editor.putString(getString(R.string.saved_ocaso), ""+0);
+        editor.putString(getString(R.string.saved_amanercer), ""+0);
+        editor.putString(getString(R.string.saved_gmt), ""+0);
 
+        editor.commit();
 
 
 
