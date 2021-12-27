@@ -23,7 +23,7 @@
     <string name="saved_max_altura">Max altura</string>
     <string name="saved_amanercer">Amanecer</string>
     <string name="saved_ocaso">Ocaso</string>
-
+    <string name="saved_alt">Altitud</string>
 
     <string name="square_root_symbol">\u221a</string>
     <string name="title_activity_main2">MainActivity2</string>

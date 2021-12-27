@@ -5,11 +5,11 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.ruben.ledesma.calcusol"
+        applicationId "com.rubenledesma.calcusol"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 14
-        versionName "1.4.5"
+        versionCode 1
+        versionName "1.5.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

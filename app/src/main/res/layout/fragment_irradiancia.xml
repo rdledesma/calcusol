@@ -100,11 +100,29 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textALT"
+        android:layout_width="83dp"
+        android:layout_height="70dp"
+        android:hint="Altitud"
+        app:layout_constraintBottom_toTopOf="@+id/horaLocalText"
+        app:layout_constraintEnd_toStartOf="@+id/textGmt"
+        app:layout_constraintStart_toEndOf="@+id/textGamma"
+        app:layout_constraintTop_toBottomOf="@+id/textJuliano">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/alt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textGmt"
         android:layout_width="83dp"
         android:layout_height="70dp"
         android:hint="GMT"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.876"
         app:layout_constraintStart_toEndOf="@+id/textGamma"
         app:layout_constraintTop_toBottomOf="@+id/textLatitud">
 
@@ -114,7 +132,6 @@
             android:layout_height="wrap_content"
             android:inputType="numberSigned" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <TextView
         android:visibility="gone"

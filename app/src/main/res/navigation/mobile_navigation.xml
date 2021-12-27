@@ -6,7 +6,7 @@
     app:startDestination="@+id/indexFragment">
     <fragment
         android:id="@+id/indexFragment"
-        android:name="com.example.calcusol.IndexFragment"
+        android:name="com.dario.calcusol.IndexFragment"
         android:label="Inicio"
         tools:layout="@layout/fragment_index" />
 
@@ -14,35 +14,40 @@
 
     <fragment
         android:id="@+id/horaSolarFragment"
-        android:name="com.example.calcusol.HoraSolarFragment"
+        android:name="com.dario.calcusol.HoraSolarFragment"
         android:label="Fecha de cálculo"
         tools:layout="@layout/fragment_hora_solar" />
 
     <fragment
         android:id="@+id/irradianciaFragment"
-        android:name="com.example.calcusol.IrradianciaFragment"
+        android:name="com.dario.calcusol.IrradianciaFragment"
         android:label="Irradiancias sobre planos"
         tools:layout="@layout/fragment_irradiancia" />
     <fragment
         android:id="@+id/resultadosFragment"
-        android:name="com.example.calcusol.ResultadosFragment"
+        android:name="com.dario.calcusol.ResultadosFragment"
         android:label="Resultados"
         tools:layout="@layout/fragment_resultados" />
     <fragment
         android:id="@+id/manualFragment"
-        android:name="com.example.calcusol.ManualFragment"
+        android:name="com.dario.calcusol.ManualFragment"
         android:label="Manual"
         tools:layout="@layout/fragment_manual" />
     <fragment
         android:id="@+id/descargasFragment"
-        android:name="com.example.calcusol.DescargasFragment"
+        android:name="com.dario.calcusol.DescargasFragment"
         android:label="Descargas"
         tools:layout="@layout/fragment_descargas" />
 
     <activity
         android:id="@+id/main2"
-        android:name="com.example.calcusol.MainActivity2"
+        android:name="com.dario.calcusol.MainActivity2"
         android:label="Modo Deslizamiento"
         tools:layout="@layout/activity_main2" />
+    <fragment
+        android:id="@+id/cieloClaroFragment"
+        android:name="com.dario.calcusol.CieloClaroFragment"
+        android:label="Modelo Cielo Claro - ARGP"
+        tools:layout="@layout/fragment_cielo_claro" />
 
 </navigation>

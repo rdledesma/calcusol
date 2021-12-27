@@ -45,8 +45,8 @@
         android:fontFamily="@font/fjalla_one"
         android:includeFontPadding="false"
         android:maxLines="4"
+        android:text="App diseñada por Lic. Rubén Darío Ledesma."
         android:textAlignment="center"
-        android:text="App diseñada por Lic. Rubén Darío Ledesma (GEERS – INENCO)."
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -55,6 +55,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvMessageIrradiancia" />
 
+
+    <TextView
+        android:id="@+id/tvDesarrollo2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:fontFamily="@font/fjalla_one"
+        android:includeFontPadding="false"
+        android:maxLines="4"
+        android:text="Co-autor: Dr. Germán Ariel Salazar."
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDesarrollo" />
+
+    <TextView
+        android:id="@+id/tvDesarrollo3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:fontFamily="@font/fjalla_one"
+        android:includeFontPadding="false"
+        android:maxLines="4"
+        android:text="GEERS – INENCO"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDesarrollo2" />
 
     <TextView
         android:id="@+id/tvVersion"
@@ -101,11 +139,12 @@
         android:id="@+id/imageInenco2"
         android:layout_width="191dp"
         android:layout_height="94dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDesarrollo"
+        app:layout_constraintTop_toBottomOf="@+id/tvDesarrollo3"
         app:srcCompat="@drawable/logoinenco">
 
     </ImageView>
