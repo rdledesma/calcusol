@@ -27,9 +27,9 @@ public class PagerController extends FragmentPagerAdapter {
             case 0:
                 return new Inicio();
             case 1:
-                return  new Entrada();
-            case 2:
                 return  new Calendario();
+            case 2:
+                return  new Entrada();
             case 3:
                 return new IrradianciaTOA();
             default:
