@@ -2,11 +2,18 @@ package com.tallytest.tablayout;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +31,8 @@ public class Entrada extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TextInputEditText dia;
+    private IrradianciaModel model;
     public Entrada() {
         // Required empty public constructor
     }
@@ -53,12 +62,27 @@ public class Entrada extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        model = new ViewModelProvider(requireActivity()).get(IrradianciaModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_entrada, container, false);
+
+
+        View view = inflater.inflate(R.layout.fragment_entrada, container, false);
+
+        dia = view.findViewById(R.id.dia);
+
+
+        model.getName().observe(requireActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                dia.setText(s);
+            }
+        });
+
+        return view;
     }
 }
