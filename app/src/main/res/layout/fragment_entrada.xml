@@ -38,7 +38,9 @@
                         android:id="@+id/latitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberSigned|numberDecimal" />
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="24.7"
+                        />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -55,7 +57,9 @@
                         android:id="@+id/longitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberSigned|numberDecimal" />
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="0"
+                        />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +75,9 @@
                         android:id="@+id/gmt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberSigned|numberDecimal" />
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="0"
+                        />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -113,6 +119,7 @@
                         android:id="@+id/beta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="0"
                         android:inputType="numberSigned|numberDecimal" />
 
 
@@ -127,6 +134,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gamma"
+                        android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal" />
@@ -140,6 +148,26 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/grap_toa"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginTop="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textGamma"
+                tools:ignore="MissingClass" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/grap_toa_cc"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textGamma"
+                tools:ignore="MissingClass" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
