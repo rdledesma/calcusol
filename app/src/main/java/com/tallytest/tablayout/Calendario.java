@@ -24,9 +24,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 
 
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
@@ -99,13 +102,9 @@ public class Calendario extends Fragment {
         declinacion = view.findViewById(R.id.declinacion);
 
 
-
-
-
-
-
-        //customize According to Your requirement
-
+        dia.setText("DIA: "+diaJuliano());
+        declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
+        model.setName(""+ diaJuliano());
 
 
 
@@ -142,34 +141,6 @@ public class Calendario extends Fragment {
 
 
 
-
-       /* calendarView.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/u");
-
-                int monthSelected = i1 +1;
-                int yearSelected = i;
-                int daySelected = i2;
-                String startDate = "1/1/"+yearSelected;
-                String endDate = daySelected+"/"+monthSelected+"/"+yearSelected;
-
-                LocalDate startDateValue = LocalDate.parse(startDate, dateFormatter);
-                LocalDate endDateValue = LocalDate.parse(endDate, dateFormatter);
-                days = ChronoUnit.DAYS.between(startDateValue, endDateValue) + 1;
-
-
-
-
-
-            }
-
-        });*/
-
-
-
-
         return view;
     }
 
@@ -188,5 +159,32 @@ public class Calendario extends Fragment {
         String formattedDouble = decimalFormat.format(result);
 
         return Double.parseDouble(formattedDouble);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private int diaJuliano(){
+        int diaJuliano;
+
+        long date = calendarView.getDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        int Year = calendar.get(Calendar.YEAR);
+        int Month = calendar.get(Calendar.MONTH);
+        int Day = calendar.get(Calendar.DAY_OF_MONTH);
+        //customize According to Your requirement
+        String finalDate=Year+"/"+Month+"/"+Day;
+
+
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/u");
+        String startDate = "1/1/"+Year;
+        String endDate = Day+"/"+Month+"/"+Year;
+
+        LocalDate startDateValue = LocalDate.parse(startDate, dateFormatter);
+        LocalDate endDateValue = LocalDate.parse(endDate, dateFormatter);
+        days = ChronoUnit.DAYS.between(startDateValue, endDateValue) + 1;
+
+        return (int) days;
     }
 }
