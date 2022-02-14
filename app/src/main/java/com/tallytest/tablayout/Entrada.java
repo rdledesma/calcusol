@@ -171,6 +171,7 @@ public class Entrada extends Fragment {
                     beta =  Integer.parseInt(String.valueOf(betaEditText.getText()));
                     loadGrap();
                     loadGrapCieloClaro();
+                    Log.d("Change beta", "Change");
                 }
             }
         });
@@ -303,7 +304,7 @@ public class Entrada extends Fragment {
         }
 
 
-        LineDataSet setParaleo = new LineDataSet(paraleloValues, "data set 1");
+        LineDataSet setParaleo = new LineDataSet(paraleloValues, "Irr. Plano Paralelo");
         setParaleo.setFillAlpha(100);
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
@@ -313,13 +314,13 @@ public class Entrada extends Fragment {
         }
 
 
-        LineDataSet setInclinado = new LineDataSet(inclinadoValues, "data set 1");
+        LineDataSet setInclinado = new LineDataSet(inclinadoValues, "Irr. Plano Inclinado");
         setInclinado.setLineWidth(2);
         setInclinado.setColor(Color.GRAY);
         setInclinado.setCircleColor(Color.GRAY);
         setInclinado.setFillColor(Color.GRAY);
         setInclinado.setCircleHoleColor(Color.GRAY);
-
+        setInclinado.setFillAlpha(100);
 
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();

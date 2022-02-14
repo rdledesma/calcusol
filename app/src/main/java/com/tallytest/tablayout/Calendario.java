@@ -170,7 +170,7 @@ public class Calendario extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date);
         int Year = calendar.get(Calendar.YEAR);
-        int Month = calendar.get(Calendar.MONTH);
+        int Month = calendar.get(Calendar.MONTH)+1;
         int Day = calendar.get(Calendar.DAY_OF_MONTH);
         //customize According to Your requirement
         String finalDate=Year+"/"+Month+"/"+Day;
