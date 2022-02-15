@@ -13,14 +13,14 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:layout_margin="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
 
                 >
 
@@ -28,19 +28,17 @@
                     android:id="@+id/textLatitud"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
                     android:hint="Latitud"
                     app:layout_constraintEnd_toStartOf="@+id/textLongitud"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginRight="4dp"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/latitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:text="24.7"
-                        />
+                        android:text="24.7" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -49,17 +47,15 @@
                     android:id="@+id/textLongitud"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:hint="Longitud"
                     android:layout_marginRight="4dp"
-                    >
+                    android:hint="Longitud">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/longitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:text="0"
-                        />
+                        android:text="0" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -68,16 +64,15 @@
                     android:id="@+id/textGMT"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:hint="GMT"
-                    android:layout_marginRight="4dp">
+                    android:layout_marginRight="4dp"
+                    android:hint="GMT">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gmt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned|numberDecimal"
-                        android:text="0"
-                        />
+                        android:text="0" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -86,8 +81,8 @@
                     android:id="@+id/textDia"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:hint="Dia"
-                    android:layout_marginRight="4dp">
+                    android:layout_marginRight="4dp"
+                    android:hint="Dia">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dia"
@@ -104,23 +99,22 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center"
-                >
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textBeta"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:hint="Beta"
-                    android:layout_marginRight="8dp">
+                    android:layout_marginRight="8dp"
+                    android:hint="Beta">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/beta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0"
-                        android:inputType="numberSigned|numberDecimal" />
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="0" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -129,20 +123,18 @@
                     android:id="@+id/textGamma"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:hint="Gamma"
-                    android:layout_marginRight="4dp">
+                    android:layout_marginRight="4dp"
+                    android:hint="Gamma">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gamma"
-                        android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberSigned|numberDecimal" />
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="0" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-
 
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -158,6 +150,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textGamma"
                 tools:ignore="MissingClass" />
+
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/grap_toa_cc"
                 android:layout_width="match_parent"
@@ -169,7 +162,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/textGamma"
                 tools:ignore="MissingClass" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
 
 
     </ScrollView>
