@@ -47,15 +47,7 @@ public class Entrada extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Entrada.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static Entrada newInstance(String param1, String param2) {
         Entrada fragment = new Entrada();
         Bundle args = new Bundle();
@@ -85,7 +77,7 @@ public class Entrada extends Fragment {
         listenerText();
 
         loadGrap();
-        //loadGrapCieloClaro();
+        loadGrapCieloClaro();
 
         return view;
     }
@@ -171,6 +163,7 @@ public class Entrada extends Fragment {
                     beta =  Integer.parseInt(String.valueOf(betaEditText.getText()));
                     loadGrap();
                     loadGrapCieloClaro();
+                    Log.d("Change beta", "Change");
                 }
             }
         });
@@ -303,7 +296,7 @@ public class Entrada extends Fragment {
         }
 
 
-        LineDataSet setParaleo = new LineDataSet(paraleloValues, "data set 1");
+        LineDataSet setParaleo = new LineDataSet(paraleloValues, "Irr. Plano Paralelo");
         setParaleo.setFillAlpha(100);
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
@@ -313,13 +306,13 @@ public class Entrada extends Fragment {
         }
 
 
-        LineDataSet setInclinado = new LineDataSet(inclinadoValues, "data set 1");
+        LineDataSet setInclinado = new LineDataSet(inclinadoValues, "Irr. Plano Inclinado");
         setInclinado.setLineWidth(2);
         setInclinado.setColor(Color.GRAY);
         setInclinado.setCircleColor(Color.GRAY);
         setInclinado.setFillColor(Color.GRAY);
         setInclinado.setCircleHoleColor(Color.GRAY);
-
+        setInclinado.setFillAlpha(100);
 
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
