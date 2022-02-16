@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -22,6 +24,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.textfield.TextInputEditText;
+import com.tallytest.tablayout.Adapters.GmtAdapter;
+import com.tallytest.tablayout.Clases.GmtItem;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
 import java.util.ArrayList;
@@ -37,6 +41,8 @@ public class Entrada extends Fragment {
     private TextInputEditText dia, latitudEditText, longitudEditText,gmtEditText, betaEditText, gammaEditText;
     private IrradianciaModel model;
     private LineChart lineChartToa, lineChartCC;
+    private ArrayList <GmtItem> gmtItems;
+    private GmtAdapter gmtAdapter;
 
 
 
@@ -69,20 +75,39 @@ public class Entrada extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_entrada, container, false);
 
-
-
-
-
         setRootView(view);
-        listenerText();
 
-        loadGrap();
-        loadGrapCieloClaro();
+
+
+
 
         return view;
     }
 
+
     private void setRootView(View view){
+        initList();
+
+        Spinner spinnerGmt = view.findViewById(R.id.spinner_gmt);
+
+        gmtAdapter = new GmtAdapter(getContext(), gmtItems);
+
+        spinnerGmt.setAdapter(gmtAdapter);
+        spinnerGmt.setSelection(12);
+
+    }
+
+
+    private void initList(){
+        gmtItems = new ArrayList<>();
+        for (int i=-12; i<=12; i++){
+            gmtItems.add(new GmtItem(i));
+        }
+
+
+    }
+
+    /*private void setRootView(View view){
         latitudEditText = view.findViewById(R.id.latitud);
         longitudEditText = view.findViewById(R.id.longitud);
         gmtEditText = view.findViewById(R.id.gmt);
@@ -106,12 +131,13 @@ public class Entrada extends Fragment {
                 dia.setText(s);
                 diaJuliano = Integer.parseInt(String.valueOf(dia.getText()));
                 loadGrapCieloClaro();
+                loadGrap();
             }
         });
 
 
 
-    }
+    }*/
 
 
     private void listenerText(){
