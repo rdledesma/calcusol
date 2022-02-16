@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -24,6 +26,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.textfield.TextInputEditText;
+import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
 import com.tallytest.tablayout.Adapters.GmtAdapter;
 import com.tallytest.tablayout.Clases.GmtItem;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
@@ -89,11 +92,34 @@ public class Entrada extends Fragment {
         initList();
 
         Spinner spinnerGmt = view.findViewById(R.id.spinner_gmt);
+        TextView textAltitud = view.findViewById(R.id.textAltitud);
+
 
         gmtAdapter = new GmtAdapter(getContext(), gmtItems);
-
         spinnerGmt.setAdapter(gmtAdapter);
         spinnerGmt.setSelection(12);
+
+
+        SeekBar seekBar  = view.findViewById(R.id.altitudSeekBar);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                progressChangedValue = progress;
+                textAltitud.setText(""+progressChangedValue+" msn");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                textAltitud.setText(""+progressChangedValue+" msn");
+            }
+        });
 
     }
 

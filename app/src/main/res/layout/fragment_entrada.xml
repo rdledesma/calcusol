@@ -20,7 +20,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="500dp"
                 android:layout_margin="16dp">
 
 
@@ -64,6 +64,19 @@
 
                 <Button
                     android:id="@+id/btnLongitud"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="+"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textLongitud"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textLongitud">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btnLongitud2"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -131,6 +144,125 @@
                     app:layout_constraintTop_toBottomOf="@+id/textLongitud">
 
                 </Spinner>
+
+
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@color/black"
+                    android:tooltipText="Altitud"
+                    app:layout_constraintBottom_toTopOf="@+id/textAltitud"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:max="2000"
+                        android:id="@+id/altitudSeekBar"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270" /> <!-- Rotation: CW90 or CW270 -->
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Altitud"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textDia">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textAltitud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="TextView"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                <Button
+                    android:id="@+id/btnBeta"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="+"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textBeta">
+
+                </Button>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textBeta"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Beta"
+                    app:layout_constraintEnd_toStartOf="@+id/textDia"
+                    app:layout_constraintStart_toEndOf="@+id/btnBeta"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_gmt">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/beta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="24.7"
+                        android:textSize="24sp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnGamma"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="+"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textGamma"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textGamma">
+
+                </Button>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textGamma"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Gamma"
+                    app:layout_constraintEnd_toStartOf="@+id/textDia"
+                    app:layout_constraintStart_toEndOf="@+id/btnLongitud"
+                    app:layout_constraintTop_toBottomOf="@+id/textBeta">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gamma"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned|numberDecimal"
+                        android:text="24.7"
+                        android:textSize="24sp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
