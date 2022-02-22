@@ -127,7 +127,8 @@ public class Entrada extends Fragment {
         altitud = 0;
 
 
-        model.getName().observe(requireActivity(), new Observer<String>() {
+
+        model.getDiaJuliano().observe(requireActivity(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 dia.setText(s);
@@ -135,6 +136,7 @@ public class Entrada extends Fragment {
                 //loadGrapCieloClaro();
                 loadGrap();
                 loadGrapCieloClaro();
+                updateModelObserver();
             }
         });
 
@@ -155,6 +157,7 @@ public class Entrada extends Fragment {
                 gmt = gmtAdapter.getItem(i).getGmt();
                 loadGrap();
                 loadGrapCieloClaro();
+                updateModelObserver();
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -173,6 +176,7 @@ public class Entrada extends Fragment {
                 textAltitud.setText(""+progressChangedValue+" msn");
                 altitud = progressChangedValue;
                 loadGrapCieloClaro();
+                updateModelObserver();
             }
 
             @Override
@@ -185,6 +189,7 @@ public class Entrada extends Fragment {
                 textAltitud.setText(""+progressChangedValue+" msn");
                 altitud = progressChangedValue;
                 loadGrapCieloClaro();
+                updateModelObserver();
             }
         });
 
@@ -224,6 +229,16 @@ public class Entrada extends Fragment {
     }*/
 
 
+    private void updateModelObserver(){
+        model.setGmt(""+gmt);
+        model.setLatitud(""+latitud);
+        model.setLongitud(""+longitud);
+        model.setBeta(""+beta);
+        model.setGamma(""+gamma);
+        model.setAltitud(""+altitud);
+    }
+
+
     private void listenerButtons(){
 
         btnLatitud.setOnClickListener(new View.OnClickListener() {
@@ -233,6 +248,7 @@ public class Entrada extends Fragment {
                 btnLatitud.setText(((signoLatitud < 0) ? "-" : "+"));
                 latitud = latitud * (-1);
                 loadGrap();
+                updateModelObserver();
             }
         });
 
@@ -243,6 +259,7 @@ public class Entrada extends Fragment {
                 btnLongitud.setText(((signoLongitud < 0) ? "-" : "+"));
                 longitud = longitud * (-1);
                 loadGrap();
+                updateModelObserver();
             }
         });
 
@@ -255,6 +272,7 @@ public class Entrada extends Fragment {
                 btnGamma.setText(((signoGamma < 0) ? "-" : "+"));
                 gamma = gamma * (-1);
                 loadGrap();
+                updateModelObserver();
             }
         });
 
@@ -270,17 +288,17 @@ public class Entrada extends Fragment {
     private void listenerText(){
 
 
-        latitudEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        latitudEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-
-
+            public void onClick(View view) {
                 if(validateInputs()){
-                    latitud =  Double.parseDouble(String.valueOf(latitudEditText.getText())) * signoLatitud;
-
+                    latitud =  Double.parseDouble(String.valueOf(latitudEditText.getText())) * signoLatitud;;
                     loadGrap();
+                    updateModelObserver();
                     //loadGrapCieloClaro();
                 }
+
+
             }
         });
 
@@ -294,6 +312,7 @@ public class Entrada extends Fragment {
                 if(validateInputs()){
                     longitud =  Double.parseDouble(String.valueOf(longitudEditText.getText())) * signoLongitud;;
                     loadGrap();
+                    updateModelObserver();
                     //loadGrapCieloClaro();
                 }
 
@@ -309,7 +328,7 @@ public class Entrada extends Fragment {
                 if(validateInputs()){
                     beta =  Integer.parseInt(String.valueOf(betaEditText.getText()));
                     loadGrap();
-
+                    updateModelObserver();
                 }
             }
         });
@@ -321,6 +340,7 @@ public class Entrada extends Fragment {
                     gamma =  Integer.parseInt(String.valueOf(gammaEditText.getText())) * signoGamma;
                     loadGrap();
                     loadGrapCieloClaro();
+                    updateModelObserver();
                 }
             }
         });

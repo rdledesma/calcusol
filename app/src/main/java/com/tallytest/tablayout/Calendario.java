@@ -104,7 +104,7 @@ public class Calendario extends Fragment {
 
         dia.setText("DIA: "+diaJuliano());
         declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
-        model.setName(""+ diaJuliano());
+        model.setDiaJuliano(""+ diaJuliano());
 
 
 
@@ -127,14 +127,14 @@ public class Calendario extends Fragment {
                     Toast.makeText(getContext(), "Día Inválido", Toast.LENGTH_LONG).show();
                     dia.setText("DIA: ");
                     declinacion.setText("");
-                    model.setName(""+1);
+                    model.setDiaJuliano(""+1);
 
 
                 }
                 else{
                     dia.setText("DIA: "+days);
                     declinacion.setText(""+getDeclinacionSpencer(Integer.parseInt(String.valueOf(days)))+"°");
-                    model.setName(""+days);
+                    model.setDiaJuliano(""+days);
                 }
             }
         });
