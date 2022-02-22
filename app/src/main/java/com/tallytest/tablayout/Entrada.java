@@ -236,6 +236,10 @@ public class Entrada extends Fragment {
         model.setBeta(""+beta);
         model.setGamma(""+gamma);
         model.setAltitud(""+altitud);
+        model.setMediodiaSolar(""+mediodiaSolar());
+        model.setAmanecer(""+getSalidaSol());
+        model.setOcaso(""+getPuestaSol());
+        model.setDuracion(""+(getPuestaSol()-getSalidaSol()));
     }
 
 
@@ -734,5 +738,50 @@ public class Entrada extends Fragment {
 
 
 
+    private double getSalidaSol(){
+        int DiaJuliano =  diaJuliano;
+        double LAT = latitud;
+        double LONG = longitud;
+        double LONGOBS = LONG - (LONG/15);
 
+
+        double GMT= Double.parseDouble(String.valueOf(gmt));
+        double result ,resultParcial, resultRad;
+        Double dec = getDeclinacion();
+        double termino1 =  -Math.tan(Math.toRadians(LAT)) * Math.tan(Math.toRadians(dec.doubleValue()));
+        double ws = Math.toDegrees(Math.acos(termino1));
+        resultParcial =  12- ws/15;
+        double resultts = resultParcial;
+        double resulttsof = resultts - (-1) - (4*(LONGOBS-LONG) + gete(DiaJuliano))/60;
+
+        //double resulttsof = resultts - (-1) + (4*((1*15 * GMT)-(1*LONG))+gete(DiaJuliano))/60;
+        //double resulttsof = resultts - (-1) + ((4*(15 * GMT)-LONG) +gete(DiaJuliano))/60;
+
+        return resulttsof;
+
+    }
+
+    private double getPuestaSol(){
+        int DiaJuliano =  diaJuliano;
+        double LAT = latitud;
+        double LONG = longitud;
+        double LONGOBS = LONG - (LONG/15);
+        double result ,resultParcial, resultRad;
+
+        Double dec = getDeclinacion();
+
+        double termino1 =  -Math.tan(Math.toRadians(LAT)) * Math.tan(Math.toRadians(dec.doubleValue()));
+        double ws = Math.toDegrees(Math.acos(termino1));
+
+        resultParcial =  12 + ws/15;
+
+        double resultts = resultParcial;
+
+        double resulttsof = resultts - (-1) - (4*(LONGOBS-LONG) + gete(DiaJuliano))/60;
+
+
+
+        return resulttsof;
+
+    }
 }

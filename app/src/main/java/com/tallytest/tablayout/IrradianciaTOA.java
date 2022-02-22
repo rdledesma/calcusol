@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link IrradianciaTOA#newInstance} factory method to
@@ -87,6 +91,92 @@ public class IrradianciaTOA extends Fragment {
             }
         });
 
+
+        model.getMediodiaSolar().observe(requireActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                TextView mediodia = view.findViewById(R.id.mediodia);
+                double hora = Double.parseDouble(s);
+                mediodia.setText(parseToTime(hora) + " hs");
+            }
+        });
+
+        model.getAmanecer().observe(requireActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                TextView amanecer = view.findViewById(R.id.amanecer);
+                double hora = Double.parseDouble(s);
+                amanecer.setText(parseToTime(hora) + " hs");
+            }
+        });
+
+
+
+        model.getDuracion().observe(requireActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                TextView duracion = view.findViewById(R.id.duracion);
+                double hora = Double.parseDouble(s);
+                duracion.setText(parseToTime(hora) + " hs");
+            }
+        });
+
+        model.getOcaso().observe(requireActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                TextView ocaso = view.findViewById(R.id.ocaso);
+                double hora = Double.parseDouble(s);
+                ocaso.setText(parseToTime(hora) + " hs");
+            }
+        });
+
+
+
         return view;
     }
+
+
+    private String parseToTime(double hora){
+        BigDecimal bd = new BigDecimal(String.valueOf(hora));
+        BigDecimal iPart = new BigDecimal(bd.toBigInteger());
+        BigDecimal fPart = bd.remainder( BigDecimal.ONE );
+        BigDecimal fPartToInt = bd.subtract(bd.setScale(0, RoundingMode.FLOOR)).movePointRight(bd.scale());
+
+        BigInteger rounded = fPartToInt.toBigInteger();
+
+
+        double parcial = hora;
+
+        if(hora<1){
+            if(hora/0.01666666667<10){
+                return "00:"+"0"+(int)(hora/0.01666666667);
+
+            }
+
+            else{
+                return "00:"+ (int)(hora/0.01666666667);
+            }
+
+        }
+
+        else{
+
+            int incremente = 0;
+            double minutos  =((hora -(int)hora)) /0.01666666667;
+
+            int as = (int) minutos;
+
+
+            if (minutos<10){
+                return (int)(hora+incremente)+":0"+((int)minutos) ;
+            }
+            else{
+                return (int)(hora+incremente)+":"+((int)minutos) ;
+            }
+
+        }
+    }
+
+
+
 }
