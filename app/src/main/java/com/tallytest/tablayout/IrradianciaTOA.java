@@ -18,11 +18,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link IrradianciaTOA#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class IrradianciaTOA extends Fragment {
 
     private IrradianciaModel model;
@@ -87,7 +83,7 @@ public class IrradianciaTOA extends Fragment {
             @Override
             public void onChanged(String s) {
                 TextView altitud = view.findViewById(R.id.altitud);
-                altitud.setText(s+ " m s. n. m");
+                altitud.setText(s+ " m s n m");
             }
         });
 
