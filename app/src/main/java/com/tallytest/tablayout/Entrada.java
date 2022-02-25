@@ -14,6 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -22,6 +27,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.textfield.TextInputEditText;
+import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
+import com.tallytest.tablayout.Adapters.GmtAdapter;
+import com.tallytest.tablayout.Clases.GmtItem;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
 import java.util.ArrayList;
@@ -34,10 +42,13 @@ import java.util.ArrayList;
 public class Entrada extends Fragment {
 
 
-    private TextInputEditText dia, latitudEditText, longitudEditText,gmtEditText, betaEditText, gammaEditText;
+    private TextInputEditText dia, latitudEditText, longitudEditText, betaEditText, gammaEditText;
+    private Button btnLatitud, btnLongitud, btnGamma;
     private IrradianciaModel model;
     private LineChart lineChartToa, lineChartCC;
-
+    private ArrayList <GmtItem> gmtItems;
+    private GmtAdapter gmtAdapter;
+    private Integer signoLatitud, signoLongitud, signoGamma, altitud;
 
 
     private double latitud, longitud;
@@ -69,22 +80,133 @@ public class Entrada extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_entrada, container, false);
 
-
-
-
-
         setRootView(view);
-        listenerText();
 
-        loadGrap();
-        loadGrapCieloClaro();
+
+
+
 
         return view;
     }
 
+
     private void setRootView(View view){
+
         latitudEditText = view.findViewById(R.id.latitud);
+        btnLatitud = view.findViewById(R.id.btnLatitud);
+
+
         longitudEditText = view.findViewById(R.id.longitud);
+        btnLongitud = view.findViewById(R.id.btnLongitud);
+
+        SeekBar seekBar  = view.findViewById(R.id.altitudSeekBar);
+        dia = view.findViewById(R.id.dia);
+
+
+        betaEditText = view.findViewById(R.id.beta);
+
+
+        gammaEditText = view.findViewById(R.id.gamma);
+        btnGamma = view.findViewById(R.id.btnGamma);
+
+        lineChartToa = view.findViewById(R.id.grap_toa);
+        lineChartCC = view.findViewById(R.id.grap_toa_cc);
+
+        signoLatitud = 1;
+        signoLongitud = 1;
+        signoGamma = 1;
+
+        listenerButtons();
+        listenerText();
+
+        latitud  =  Double.parseDouble(String.valueOf(latitudEditText.getText()));
+        longitud = Double.parseDouble(String.valueOf(longitudEditText.getText()));
+        gmt = 0;
+        beta = 0;
+        gamma = 0;
+        altitud = 0;
+
+
+
+        model.getDiaJuliano().observe(requireActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                dia.setText(s);
+                diaJuliano = Integer.parseInt(String.valueOf(dia.getText()));
+                //loadGrapCieloClaro();
+                loadGrap();
+                loadGrapCieloClaro();
+                updateModelObserver();
+            }
+        });
+
+
+
+        initList();
+
+        Spinner spinnerGmt = view.findViewById(R.id.spinner_gmt);
+        TextView textAltitud = view.findViewById(R.id.textAltitud);
+
+
+        gmtAdapter = new GmtAdapter(getContext(), gmtItems);
+        spinnerGmt.setAdapter(gmtAdapter);
+        spinnerGmt.setSelection(12);
+
+        spinnerGmt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                gmt = gmtAdapter.getItem(i).getGmt();
+                loadGrap();
+                loadGrapCieloClaro();
+                updateModelObserver();
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
+
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                progressChangedValue = progress;
+                textAltitud.setText(""+progressChangedValue+" msn");
+                altitud = progressChangedValue;
+                loadGrapCieloClaro();
+                updateModelObserver();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                textAltitud.setText(""+progressChangedValue+" msn");
+                altitud = progressChangedValue;
+                loadGrapCieloClaro();
+                updateModelObserver();
+            }
+        });
+
+    }
+
+
+    private void initList(){
+        gmtItems = new ArrayList<>();
+        for (int i=-12; i<=12; i++){
+            gmtItems.add(new GmtItem(i));
+        }
+
+
+    }
+
+    /*private void setRootView(View view){
+
         gmtEditText = view.findViewById(R.id.gmt);
         dia = view.findViewById(R.id.dia);
         betaEditText = view.findViewById(R.id.beta);
@@ -94,39 +216,93 @@ public class Entrada extends Fragment {
         lineChartToa = view.findViewById(R.id.grap_toa);
         lineChartCC = view.findViewById(R.id.grap_toa_cc);
 
-        latitud  =  Double.parseDouble(String.valueOf(latitudEditText.getText()));
-        longitud = Double.parseDouble(String.valueOf(longitudEditText.getText()));
+
         gmt = Integer.parseInt(String.valueOf(gmtEditText.getText()));
 
 
 
-        model.getName().observe(requireActivity(), new Observer<String>() {
+
+
+
+
+
+    }*/
+
+
+    private void updateModelObserver(){
+        model.setGmt(""+gmt);
+        model.setLatitud(""+latitud);
+        model.setLongitud(""+longitud);
+        model.setBeta(""+beta);
+        model.setGamma(""+gamma);
+        model.setAltitud(""+altitud);
+        model.setMediodiaSolar(""+mediodiaSolar());
+        model.setAmanecer(""+getSalidaSol());
+        model.setOcaso(""+getPuestaSol());
+        model.setDuracion(""+(getPuestaSol()-getSalidaSol()));
+    }
+
+
+    private void listenerButtons(){
+
+        btnLatitud.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable String s) {
-                dia.setText(s);
-                diaJuliano = Integer.parseInt(String.valueOf(dia.getText()));
-                loadGrapCieloClaro();
+            public void onClick(View view) {
+                signoLatitud = signoLatitud * (-1);
+                btnLatitud.setText(((signoLatitud < 0) ? "-" : "+"));
+                latitud = latitud * (-1);
+                loadGrap();
+                updateModelObserver();
             }
         });
+
+        btnLongitud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signoLongitud = signoLongitud * (-1);
+                btnLongitud.setText(((signoLongitud < 0) ? "-" : "+"));
+                longitud = longitud * (-1);
+                loadGrap();
+                updateModelObserver();
+            }
+        });
+
+
+
+        btnGamma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signoGamma = signoGamma * (-1);
+                btnGamma.setText(((signoGamma < 0) ? "-" : "+"));
+                gamma = gamma * (-1);
+                loadGrap();
+                updateModelObserver();
+            }
+        });
+
+
+
 
 
 
     }
 
 
+
     private void listenerText(){
 
 
-        latitudEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        latitudEditText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-
-
+            public void onClick(View view) {
                 if(validateInputs()){
-                    latitud =  Double.parseDouble(String.valueOf(latitudEditText.getText()));
+                    latitud =  Double.parseDouble(String.valueOf(latitudEditText.getText())) * signoLatitud;;
                     loadGrap();
-                    loadGrapCieloClaro();
+                    updateModelObserver();
+                    //loadGrapCieloClaro();
                 }
+
+
             }
         });
 
@@ -138,23 +314,17 @@ public class Entrada extends Fragment {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
-                    longitud =  Double.parseDouble(String.valueOf(longitudEditText.getText()));
+                    longitud =  Double.parseDouble(String.valueOf(longitudEditText.getText())) * signoLongitud;;
                     loadGrap();
-                    loadGrapCieloClaro();
+                    updateModelObserver();
+                    //loadGrapCieloClaro();
                 }
+
+
             }
         });
 
-        gmtEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(validateInputs()){
-                    gmt =  Integer.parseInt(String.valueOf(gmtEditText.getText()));
-                    loadGrap();
-                    loadGrapCieloClaro();
-                }
-            }
-        });
+
 
         betaEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,8 +332,7 @@ public class Entrada extends Fragment {
                 if(validateInputs()){
                     beta =  Integer.parseInt(String.valueOf(betaEditText.getText()));
                     loadGrap();
-                    loadGrapCieloClaro();
-                    Log.d("Change beta", "Change");
+                    updateModelObserver();
                 }
             }
         });
@@ -172,8 +341,10 @@ public class Entrada extends Fragment {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
-                    gamma =  Integer.parseInt(String.valueOf(gammaEditText.getText()));
+                    gamma =  Integer.parseInt(String.valueOf(gammaEditText.getText())) * signoGamma;
                     loadGrap();
+                    loadGrapCieloClaro();
+                    updateModelObserver();
                 }
             }
         });
@@ -243,27 +414,6 @@ public class Entrada extends Fragment {
         }
     }
 
-    private boolean validateGMT(){
-        if(gmtEditText.getText().length() == 0){
-            Toast.makeText(getContext(), "GMT inválido", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else {
-            int GMT =  Integer.parseInt(String.valueOf(gmtEditText.getText()));
-            double LONG =  Double.parseDouble (String.valueOf(gmtEditText.getText()));
-            if (GMT<-12 || GMT>12){
-                Toast.makeText(getContext(), "GMT inválido", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            /*
-            if (GMT<0 && LONG>=0 ){
-                Toast.makeText(getContext(), "GMT y/o LONG inválidos", Toast.LENGTH_SHORT).show();
-                return false;
-            } */
-
-            return true;
-        }
-    }
 
 
 
@@ -279,7 +429,7 @@ public class Entrada extends Fragment {
 
 
     private boolean validateInputs(){
-        if(validateGMT() && validateLatitud() && validateLongitud() && validateBeta() && validateGamma()){
+        if(validateLatitud() && validateLongitud() && validateBeta() && validateGamma()){
             return true;
         }else{
             return false;
@@ -288,6 +438,10 @@ public class Entrada extends Fragment {
 
 
     private void loadGrap() {
+
+
+
+
         lineChartToa.clear();
         ArrayList<Entry> paraleloValues = new ArrayList<>();
         for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
@@ -316,9 +470,9 @@ public class Entrada extends Fragment {
 
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(setParaleo);
-        dataSets.add(setInclinado);
 
+        dataSets.add(setInclinado);
+        dataSets.add(setParaleo);
 
 
 
@@ -330,15 +484,14 @@ public class Entrada extends Fragment {
 
 
     private void loadGrapCieloClaro() {
+
+        Log.d("Ejecuta Beta ", ""+beta);
         lineChartCC.clear();
         ArrayList<Entry> values = new ArrayList<>();
 
-        float latF = (float)latitud;
-
-        Log.d("LAT ", ""+latF);
 
         for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
-            values.add(new Entry( (float)i , (float) latitud ));
+            values.add(new Entry( (float)i , (float) ghicc(i) ));
         }
 
         LineDataSet setValues = new LineDataSet(values, "data set 1");
@@ -362,8 +515,8 @@ public class Entrada extends Fragment {
 
 
 
-        double cosBeta = Math.cos(Math.toRadians(45));
-        double senBeta = Math.sin(Math.toRadians(45));
+        double cosBeta = Math.cos(Math.toRadians(beta));
+        double senBeta = Math.sin(Math.toRadians(gamma));
 
         double titaZero = Math.acos(getCosTitaZero(horaReloj));
 
@@ -381,7 +534,7 @@ public class Entrada extends Fragment {
         else{
 
             //result = getCosTitaZero(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(Gamma);
-            result = getCosTitaZero(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(getAzimutdelSol(horaReloj) - Math.toRadians(90));
+            result = getCosTitaZero(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(getAzimutdelSol(horaReloj) - Math.toRadians(gamma));
 
             return result;
         }
@@ -557,5 +710,78 @@ public class Entrada extends Fragment {
     }
 
 
+    private double masaAire(double horaReloj){
 
+
+
+        Double cosTitaZ = getCosTitaZero(horaReloj);
+
+        Double titaZ = Math.toDegrees(Math.acos(cosTitaZ)) ;
+
+
+
+        Double med = 0.15 *  Math.pow(93.885 - titaZ, -1.253);
+        return 1 / (cosTitaZ + med);
+    }
+
+    private double ktr(){
+
+        double ktr = 0.7 + 1.6391 * Math.pow(10,-3) * Math.pow( altitud , 0.5500);
+        return  ktr;
+    }
+
+
+    private double ghicc(double horaReloj){
+        double med = Math.pow(masaAire(horaReloj), 0.678);
+        return irradianciaPlanoParalelo(horaReloj) * Math.pow(ktr(), med);
+    }
+
+
+
+    private double getSalidaSol(){
+        int DiaJuliano =  diaJuliano;
+        double LAT = latitud;
+        double LONG = longitud;
+        double LONGOBS = LONG - (LONG/15);
+
+
+        double GMT= Double.parseDouble(String.valueOf(gmt));
+        double result ,resultParcial, resultRad;
+        Double dec = getDeclinacion();
+        double termino1 =  -Math.tan(Math.toRadians(LAT)) * Math.tan(Math.toRadians(dec.doubleValue()));
+        double ws = Math.toDegrees(Math.acos(termino1));
+        resultParcial =  12- ws/15;
+        double resultts = resultParcial;
+        double resulttsof = resultts - (-1) - (4*(LONGOBS-LONG) + gete(DiaJuliano))/60;
+
+        //double resulttsof = resultts - (-1) + (4*((1*15 * GMT)-(1*LONG))+gete(DiaJuliano))/60;
+        //double resulttsof = resultts - (-1) + ((4*(15 * GMT)-LONG) +gete(DiaJuliano))/60;
+
+        return resulttsof;
+
+    }
+
+    private double getPuestaSol(){
+        int DiaJuliano =  diaJuliano;
+        double LAT = latitud;
+        double LONG = longitud;
+        double LONGOBS = LONG - (LONG/15);
+        double result ,resultParcial, resultRad;
+
+        Double dec = getDeclinacion();
+
+        double termino1 =  -Math.tan(Math.toRadians(LAT)) * Math.tan(Math.toRadians(dec.doubleValue()));
+        double ws = Math.toDegrees(Math.acos(termino1));
+
+        resultParcial =  12 + ws/15;
+
+        double resultts = resultParcial;
+
+        double resulttsof = resultts - (-1) - (4*(LONGOBS-LONG) + gete(DiaJuliano))/60;
+
+
+
+        return resulttsof;
+
+    }
 }
