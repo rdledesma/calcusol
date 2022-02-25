@@ -52,7 +52,7 @@ public class Entrada extends Fragment {
 
 
     private double latitud, longitud;
-    private int diaJuliano, gmt, beta, gamma;
+    private int diaJuliano, gmt, beta, gamma, granularidad;
 
     public Entrada() {
         // Required empty public constructor
@@ -126,7 +126,13 @@ public class Entrada extends Fragment {
         gamma = 0;
         altitud = 0;
 
-
+        model.getGranularity().observe(requireActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                granularidad = integer;
+                loadGrap();
+            }
+        });
 
         model.getDiaJuliano().observe(requireActivity(), new Observer<String>() {
             @Override
@@ -454,7 +460,7 @@ public class Entrada extends Fragment {
         setParaleo.setFillAlpha(100);
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
-        for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
 
             inclinadoValues.add(new Entry((float) i, (float) irradianciaPlanoInclinado(i)));
         }
@@ -490,7 +496,7 @@ public class Entrada extends Fragment {
         ArrayList<Entry> values = new ArrayList<>();
 
 
-        for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
             values.add(new Entry( (float)i , (float) ghicc(i) ));
         }
 
