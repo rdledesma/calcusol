@@ -1,10 +1,13 @@
 package com.tallytest.tablayout;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.tallytest.tablayout.Controller.PagerController;
+import com.tallytest.tablayout.modals.ExportModal;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Image", "clic image");
+                ExportModal exportModal = new ExportModal();
+                exportModal.show(getSupportFragmentManager() , "asd");
             }
         });
 
@@ -117,4 +122,5 @@ public class MainActivity extends AppCompatActivity {
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
+
 }

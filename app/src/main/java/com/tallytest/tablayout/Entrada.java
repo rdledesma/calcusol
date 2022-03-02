@@ -30,6 +30,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
 import com.tallytest.tablayout.Adapters.GmtAdapter;
 import com.tallytest.tablayout.Clases.GmtItem;
+import com.tallytest.tablayout.modals.ExportModal;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
 import java.util.ArrayList;
@@ -450,7 +451,7 @@ public class Entrada extends Fragment {
 
         lineChartToa.clear();
         ArrayList<Entry> paraleloValues = new ArrayList<>();
-        for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
 
             paraleloValues.add(new Entry((float) i, (float) irradianciaPlanoParalelo(i)));
         }
@@ -491,7 +492,6 @@ public class Entrada extends Fragment {
 
     private void loadGrapCieloClaro() {
 
-        Log.d("Ejecuta Beta ", ""+beta);
         lineChartCC.clear();
         ArrayList<Entry> values = new ArrayList<>();
 
@@ -790,4 +790,7 @@ public class Entrada extends Fragment {
         return resulttsof;
 
     }
+
+
+
 }
