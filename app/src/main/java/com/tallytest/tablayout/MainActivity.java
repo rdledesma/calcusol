@@ -21,7 +21,7 @@ import com.tallytest.tablayout.Controller.PagerController;
 import com.tallytest.tablayout.modals.ExportModal;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ExportModal.FileNameSelected {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -123,4 +123,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
 
+
+    @Override
+    public void sendName(String name) {
+        Log.d("LOG", name);
+    }
 }
