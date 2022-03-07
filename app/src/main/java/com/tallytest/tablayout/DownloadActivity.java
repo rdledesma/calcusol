@@ -86,6 +86,19 @@ public class DownloadActivity extends AppCompatActivity {
 
                 }
             });
+
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    File item = (File) customAdapter.getItem(i);
+                    item.delete();
+
+                    cargarArchivos();
+
+                    return false;
+                }
+            });
         }
     }
 
