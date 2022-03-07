@@ -21,7 +21,7 @@ import com.tallytest.tablayout.Controller.PagerController;
 import com.tallytest.tablayout.modals.ExportModal;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
-public class MainActivity extends AppCompatActivity implements ExportModal.FileNameSelected {
+public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -48,13 +48,6 @@ public class MainActivity extends AppCompatActivity implements ExportModal.FileN
 
 
         ImageView imageView = findViewById(R.id.imgDownload);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ExportModal exportModal = new ExportModal();
-                exportModal.show(getSupportFragmentManager() , "asd");
-            }
-        });
 
         TextView granularity = findViewById(R.id.tvGranularity);
         granularity.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +117,4 @@ public class MainActivity extends AppCompatActivity implements ExportModal.FileN
     }
 
 
-    @Override
-    public void sendName(String name) {
-        Log.d("LOG", name);
-    }
 }
