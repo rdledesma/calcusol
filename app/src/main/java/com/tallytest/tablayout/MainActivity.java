@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +49,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         ImageView imageView = findViewById(R.id.imgDownload);
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //A descargas
+
+                startActivity(new Intent(MainActivity.this, DownloadActivity.class));
+            }
+        });
+
 
         TextView granularity = findViewById(R.id.tvGranularity);
         granularity.setOnClickListener(new View.OnClickListener() {
