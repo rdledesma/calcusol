@@ -581,6 +581,8 @@ public class Entrada extends Fragment {
         LineData data = new LineData(dataSets);
 
         lineChartToa.setData(data);
+        lineChartToa.getAxisRight().setEnabled(false); // no right axis
+        lineChartToa.getAxisLeft().setAxisMaximum(1500);
     }
 
 
@@ -602,7 +604,8 @@ public class Entrada extends Fragment {
         LineData data = new LineData(dataSets);
 
         lineChartCC.setData(data);
-
+        lineChartCC.getAxisRight().setEnabled(false); // no right axis
+        lineChartCC.getAxisLeft().setAxisMaximum(1500);
 
 
     }
