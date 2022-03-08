@@ -1,5 +1,6 @@
 package com.tallytest.tablayout;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -63,7 +65,7 @@ public class Entrada extends Fragment {
     private ArrayList <GmtItem> gmtItems;
     private GmtAdapter gmtAdapter;
     private Integer signoLatitud, signoLongitud, signoGamma, altitud;
-
+    public Integer gran;
     private EditText editTextExcel;
     String root = Environment.getExternalStorageDirectory().toString();
 
@@ -97,7 +99,7 @@ public class Entrada extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        gran  = 5;
         model = new ViewModelProvider(requireActivity()).get(IrradianciaModel.class);
     }
 
@@ -237,6 +239,54 @@ public class Entrada extends Fragment {
                 altitud = progressChangedValue;
                 loadGrapCieloClaro();
                 updateModelObserver();
+            }
+        });
+
+        ImageView imageView = view.findViewById(R.id.imgDownload);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), DownloadActivity.class));
+            }
+        });
+
+
+        ImageView imageSave  = view.findViewById(R.id.imageSave);
+        imageSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
+                ExportExcel(currentDateandTime);
+            }
+        });
+
+
+        TextView granularity = view.findViewById(R.id.tvGranularity);
+        granularity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                switch (gran){
+                    case 5:
+                        granularity.setText("10");
+                        model.setGranularity(10);
+                        gran = 10;
+                        break;
+                    case 10:
+                        granularity.setText("15");
+                        model.setGranularity(15);
+                        gran = 15;
+                        break;
+                    case 15:
+                        granularity.setText("5");
+                        model.setGranularity(5);
+                        gran = 5;
+                        break;
+                }
+
             }
         });
 
