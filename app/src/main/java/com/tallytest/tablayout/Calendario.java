@@ -1,5 +1,6 @@
 package com.tallytest.tablayout;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -15,8 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
@@ -105,6 +108,16 @@ public class Calendario extends Fragment {
         dia.setText("DIA: "+diaJuliano());
         declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
         model.setDiaJuliano(""+ diaJuliano());
+
+
+        ImageView imageView = view.findViewById(R.id.imgDownload);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), DownloadActivity.class));
+            }
+        });
 
 
 

@@ -1,21 +1,25 @@
 package com.tallytest.tablayout;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,13 +30,25 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
 import com.tallytest.tablayout.Adapters.GmtAdapter;
 import com.tallytest.tablayout.Clases.GmtItem;
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,10 +65,24 @@ public class Entrada extends Fragment {
     private ArrayList <GmtItem> gmtItems;
     private GmtAdapter gmtAdapter;
     private Integer signoLatitud, signoLongitud, signoGamma, altitud;
+    public Integer gran;
+    private EditText editTextExcel;
+    String root = Environment.getExternalStorageDirectory().toString();
 
 
+
+    private boolean tienePermisoAlmacenamiento = false;
+
+    private static final int CODIGO_PERMISOS_ALMACENAMIENTO = 2;
     private double latitud, longitud;
-    private int diaJuliano, gmt, beta, gamma;
+    private int diaJuliano, gmt, beta, gamma, granularidad;
+
+    private ArrayList<Double> irradianciaSolidario = new ArrayList<Double>();
+    private ArrayList<String> horaArray = new ArrayList<String>();
+
+
+
+
 
     public Entrada() {
         // Required empty public constructor
@@ -69,7 +99,7 @@ public class Entrada extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        gran  = 5;
         model = new ViewModelProvider(requireActivity()).get(IrradianciaModel.class);
     }
 
@@ -91,6 +121,19 @@ public class Entrada extends Fragment {
 
 
     private void setRootView(View view){
+
+
+
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.floating);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
+                ExportExcel(currentDateandTime);
+            }
+        });
+
 
         latitudEditText = view.findViewById(R.id.latitud);
         btnLatitud = view.findViewById(R.id.btnLatitud);
@@ -126,7 +169,13 @@ public class Entrada extends Fragment {
         gamma = 0;
         altitud = 0;
 
-
+        model.getGranularity().observe(requireActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                granularidad = integer;
+                loadGrap();
+            }
+        });
 
         model.getDiaJuliano().observe(requireActivity(), new Observer<String>() {
             @Override
@@ -190,6 +239,54 @@ public class Entrada extends Fragment {
                 altitud = progressChangedValue;
                 loadGrapCieloClaro();
                 updateModelObserver();
+            }
+        });
+
+        ImageView imageView = view.findViewById(R.id.imgDownload);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), DownloadActivity.class));
+            }
+        });
+
+
+        ImageView imageSave  = view.findViewById(R.id.imageSave);
+        imageSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
+                ExportExcel(currentDateandTime);
+            }
+        });
+
+
+        TextView granularity = view.findViewById(R.id.tvGranularity);
+        granularity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                switch (gran){
+                    case 5:
+                        granularity.setText("10");
+                        model.setGranularity(10);
+                        gran = 10;
+                        break;
+                    case 10:
+                        granularity.setText("15");
+                        model.setGranularity(15);
+                        gran = 15;
+                        break;
+                    case 15:
+                        granularity.setText("5");
+                        model.setGranularity(5);
+                        gran = 5;
+                        break;
+                }
+
             }
         });
 
@@ -444,8 +541,12 @@ public class Entrada extends Fragment {
 
         lineChartToa.clear();
         ArrayList<Entry> paraleloValues = new ArrayList<>();
-        for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
+            horaArray.add(""+i);
 
+            double irra = irradianciaPlanoParalelo(i);
+
+            irradianciaSolidario.add(irra);
             paraleloValues.add(new Entry((float) i, (float) irradianciaPlanoParalelo(i)));
         }
 
@@ -454,7 +555,7 @@ public class Entrada extends Fragment {
         setParaleo.setFillAlpha(100);
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
-        for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
 
             inclinadoValues.add(new Entry((float) i, (float) irradianciaPlanoInclinado(i)));
         }
@@ -480,17 +581,18 @@ public class Entrada extends Fragment {
         LineData data = new LineData(dataSets);
 
         lineChartToa.setData(data);
+        lineChartToa.getAxisRight().setEnabled(false); // no right axis
+        lineChartToa.getAxisLeft().setAxisMaximum(1500);
     }
 
 
     private void loadGrapCieloClaro() {
 
-        Log.d("Ejecuta Beta ", ""+beta);
         lineChartCC.clear();
         ArrayList<Entry> values = new ArrayList<>();
 
 
-        for (double i = 0; i <24; i=i+(0.01666666667 * 10)) {
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
             values.add(new Entry( (float)i , (float) ghicc(i) ));
         }
 
@@ -502,7 +604,8 @@ public class Entrada extends Fragment {
         LineData data = new LineData(dataSets);
 
         lineChartCC.setData(data);
-
+        lineChartCC.getAxisRight().setEnabled(false); // no right axis
+        lineChartCC.getAxisLeft().setAxisMaximum(1500);
 
 
     }
@@ -784,4 +887,125 @@ public class Entrada extends Fragment {
         return resulttsof;
 
     }
+
+
+    public void ExportExcel(String name){
+
+        final File dir;
+        if (Build.VERSION_CODES.R > Build.VERSION.SDK_INT) {
+            dir = new File(Environment.getExternalStorageDirectory().getPath()
+                    + "//CALCUSOL");
+        } else {
+            dir = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).getPath()
+                    + "//CALCUSOL");
+        }
+
+        if (!dir.exists())
+            dir.mkdir();
+
+
+
+
+        File filePath = new File( dir.getPath()+"/"+name+".xls");
+
+
+
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Custom Sheet");
+
+        HSSFRow rowHeader = hssfSheet.createRow(0);
+
+        HSSFCell hora = rowHeader.createCell(0);
+        hora.setCellValue("Hora");
+
+        HSSFCell cellCosTitaZero = rowHeader.createCell(1);
+        cellCosTitaZero.setCellValue("Cos Tita Zero");
+
+
+        HSSFCell cellCosTita= rowHeader.createCell(2);
+        cellCosTita.setCellValue("Cos Tita");
+
+        HSSFCell cellIrradianciaSolidaria= rowHeader.createCell(3);
+        cellIrradianciaSolidaria.setCellValue("Irrad. plano paralelo");
+
+        HSSFCell cellIrradianciaInclinado= rowHeader.createCell(4);
+        cellIrradianciaInclinado.setCellValue("Irrad. plano inclinado");
+
+
+
+        for (int i = 1; i <irradianciaSolidario.size()+1; i=i+1) {
+            HSSFRow hssfRow2 = hssfSheet.createRow(i);
+
+
+            HSSFCell horaCell = hssfRow2.createCell(0);
+            HSSFCell cosTitaZero = hssfRow2.createCell(1);
+            HSSFCell cosTita = hssfRow2.createCell(2);
+            HSSFCell irradianciaSolidaria = hssfRow2.createCell(3);
+            HSSFCell irradianciaInclinada = hssfRow2.createCell(4);
+
+
+            horaCell.setCellValue(horaArray.get(i-1));
+            irradianciaSolidaria.setCellValue(irradianciaSolidario.get(i-1));
+
+        }
+
+
+        try {
+
+
+
+            if (!filePath.exists()){
+                filePath.createNewFile();
+            }
+
+            FileOutputStream fileOutputStream= new FileOutputStream(filePath);
+            hssfWorkbook.write(fileOutputStream);
+
+            if (fileOutputStream!=null){
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                Toast.makeText(getContext(), "Guardado en CALCUSOl/"+name, Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CODIGO_PERMISOS_ALMACENAMIENTO:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permisoDeAlmacenamientoConcedido();
+                } else {
+                    permisoDeAlmacenamientoDenegado();
+                }
+                break;
+
+            // Aquí más casos dependiendo de los permisos
+            // case OTRO_CODIGO_DE_PERMISOS...
+
+        }
+    }
+
+    private void permisoDeAlmacenamientoConcedido() {
+        // Aquí establece las banderas o haz lo que
+        // ibas a hacer cuando el permiso se concediera. Por
+        // ejemplo puedes poner la bandera en true y más
+        // tarde en otra función comprobar esa bandera
+        Toast.makeText(getContext(), "El permiso para el almacenamiento está concedido",
+                Toast.LENGTH_SHORT).show();
+        tienePermisoAlmacenamiento = true;
+    }
+
+    private void permisoDeAlmacenamientoDenegado() {
+        // Esto se llama cuando el usuario hace click en "Denegar" o
+        // cuando lo denegó anteriormente
+        Toast.makeText(getContext(), "El permiso para el almacenamiento está denegado", Toast.LENGTH_SHORT).show();
+    }
+
+
+
 }

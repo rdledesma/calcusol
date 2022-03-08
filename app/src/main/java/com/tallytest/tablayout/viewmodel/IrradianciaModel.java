@@ -22,9 +22,16 @@ public class IrradianciaModel extends ViewModel {
     private MutableLiveData<String> mediodiaSolar = new MutableLiveData<>();
     private MutableLiveData<String> maxAlturaSolar = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> granularity= new MutableLiveData<>();
+
+
+
     public MutableLiveData<String> getDuracion() {
         return duracion;
     }
+
+
+
 
     public void setDuracion(String duracion) {
         this.duracion.setValue(duracion);
@@ -120,5 +127,14 @@ public class IrradianciaModel extends ViewModel {
 
     public void setOcaso(String ocaso) {
         this.ocaso.setValue(ocaso);
+    }
+
+
+    public void setGranularity(Integer granularity){
+        this.granularity.setValue(granularity);
+    }
+
+    public MutableLiveData<Integer>  getGranularity(){
+        return this.granularity;
     }
 }
