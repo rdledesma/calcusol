@@ -78,8 +78,10 @@ public class Entrada extends Fragment {
     private int diaJuliano, gmt, beta, gamma, granularidad;
 
     private ArrayList<Double> irradianciaSolidario = new ArrayList<Double>();
+    private ArrayList<Double> irradianciaInclinado = new ArrayList<Double>();
+    private ArrayList<Double> irradianciaCieloClaro = new ArrayList<Double>();
     private ArrayList<String> horaArray = new ArrayList<String>();
-
+    private ArrayList<Double> cosTitaZerorray = new ArrayList<Double>();
 
 
 
@@ -174,6 +176,7 @@ public class Entrada extends Fragment {
             public void onChanged(Integer integer) {
                 granularidad = integer;
                 loadGrap();
+                loadGrapCieloClaro();
             }
         });
 
@@ -349,6 +352,7 @@ public class Entrada extends Fragment {
                 btnLatitud.setText(((signoLatitud < 0) ? "-" : "+"));
                 latitud = latitud * (-1);
                 loadGrap();
+                loadGrapCieloClaro();
                 updateModelObserver();
             }
         });
@@ -360,6 +364,7 @@ public class Entrada extends Fragment {
                 btnLongitud.setText(((signoLongitud < 0) ? "-" : "+"));
                 longitud = longitud * (-1);
                 loadGrap();
+                loadGrapCieloClaro();
                 updateModelObserver();
             }
         });
@@ -395,6 +400,7 @@ public class Entrada extends Fragment {
                 if(validateInputs()){
                     latitud =  Double.parseDouble(String.valueOf(latitudEditText.getText())) * signoLatitud;;
                     loadGrap();
+                    loadGrapCieloClaro();
                     updateModelObserver();
                     //loadGrapCieloClaro();
                 }
@@ -413,6 +419,7 @@ public class Entrada extends Fragment {
                 if(validateInputs()){
                     longitud =  Double.parseDouble(String.valueOf(longitudEditText.getText())) * signoLongitud;;
                     loadGrap();
+                    loadGrapCieloClaro();
                     updateModelObserver();
                     //loadGrapCieloClaro();
                 }
@@ -440,7 +447,6 @@ public class Entrada extends Fragment {
                 if(validateInputs()){
                     gamma =  Integer.parseInt(String.valueOf(gammaEditText.getText())) * signoGamma;
                     loadGrap();
-                    loadGrapCieloClaro();
                     updateModelObserver();
                 }
             }
@@ -545,7 +551,7 @@ public class Entrada extends Fragment {
             horaArray.add(""+i);
 
             double irra = irradianciaPlanoParalelo(i);
-
+            cosTitaZerorray.add(getCosTitaZero(i));
             irradianciaSolidario.add(irra);
             paraleloValues.add(new Entry((float) i, (float) irradianciaPlanoParalelo(i)));
         }
@@ -556,7 +562,7 @@ public class Entrada extends Fragment {
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
-
+            irradianciaInclinado.add(irradianciaPlanoInclinado(i));
             inclinadoValues.add(new Entry((float) i, (float) irradianciaPlanoInclinado(i)));
         }
 
@@ -596,7 +602,7 @@ public class Entrada extends Fragment {
             values.add(new Entry( (float)i , (float) ghicc(i) ));
         }
 
-        LineDataSet setValues = new LineDataSet(values, "data set 1");
+        LineDataSet setValues = new LineDataSet(values, "GHI Cielco Claro");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(setValues);
 
@@ -947,14 +953,13 @@ public class Entrada extends Fragment {
 
             horaCell.setCellValue(horaArray.get(i-1));
             irradianciaSolidaria.setCellValue(irradianciaSolidario.get(i-1));
+            cosTitaZero.setCellValue(cosTitaZerorray.get(i-1));
+            irradianciaInclinada.setCellValue(irradianciaInclinado.get(i-1));
 
         }
 
 
         try {
-
-
-
             if (!filePath.exists()){
                 filePath.createNewFile();
             }
@@ -1005,7 +1010,4 @@ public class Entrada extends Fragment {
         // cuando lo denegó anteriormente
         Toast.makeText(getContext(), "El permiso para el almacenamiento está denegado", Toast.LENGTH_SHORT).show();
     }
-
-
-
 }

@@ -10,32 +10,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
-import java.util.Date;
-
-
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +48,7 @@ public class Calendario extends Fragment {
 
     private IrradianciaModel model;
     private CalendarView calendarView;
-    private TextView declinacion, dia;
+    private TextView declinacion, dia, irradianciaNormal;
     long days;
     public Calendario() {
         // Required empty public constructor
@@ -103,12 +92,15 @@ public class Calendario extends Fragment {
         calendarView = view.findViewById(R.id.calendarView);
         dia = view.findViewById(R.id.dia);
         declinacion = view.findViewById(R.id.declinacion);
-
+        irradianciaNormal = view.findViewById(R.id.irradianciaNormal);
 
         dia.setText("DIA: "+diaJuliano());
         declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
         model.setDiaJuliano(""+ diaJuliano());
 
+
+
+        irradianciaNormal.setText(""+ IrraTOAN(diaJuliano()) );
 
         ImageView imageView = view.findViewById(R.id.imgDownload);
 
@@ -157,7 +149,24 @@ public class Calendario extends Fragment {
         return view;
     }
 
+    
 
+
+
+    private String IrraTOAN(int n){
+        double gamma = 2 * Math.PI * (n - 1)/365;
+
+
+
+        double result =  1.000110 + 0.034221*Math.cos(gamma) + 0.001280*Math.sin(gamma) + 0.000719*Math.cos(2*gamma) + 0.000077*Math.sin(2*gamma);
+
+        result = result * 1361;
+        String pattern = "#.##";
+        DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+        String formattedDouble = decimalFormat.format(result);
+        return formattedDouble+" whm2";
+
+    }
 
 
     private double getDeclinacionSpencer(int diaJuliano){
@@ -167,7 +176,7 @@ public class Calendario extends Fragment {
 
         result =  Math.toDegrees(result);
 
-        String pattern = "#.###";
+        String pattern = "#.##";
         DecimalFormat decimalFormat =  new DecimalFormat(pattern);
         String formattedDouble = decimalFormat.format(result);
 
@@ -200,4 +209,7 @@ public class Calendario extends Fragment {
 
         return (int) days;
     }
+
+
+
 }

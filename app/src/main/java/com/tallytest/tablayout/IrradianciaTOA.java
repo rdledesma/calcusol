@@ -75,6 +75,11 @@ public class IrradianciaTOA extends Fragment {
             public void onChanged(String s) {
                 TextView lat = view.findViewById(R.id.lat);
                 lat.setText(s +"°");
+
+
+                TextView alturaSolar = view.findViewById(R.id.alturaSolar);
+                alturaSolar.setText(""+MaxAlturaSolar( model.getDiaJuliano().getValue() , s));
+
             }
         });
         model.getLongitud().observe(requireActivity(), new Observer<String>() {
@@ -163,7 +168,6 @@ public class IrradianciaTOA extends Fragment {
         if(hora<1){
             if(hora/0.01666666667<10){
                 return "00:"+"0"+(int)(hora/0.01666666667);
-
             }
 
             else{
@@ -189,6 +193,27 @@ public class IrradianciaTOA extends Fragment {
 
         }
     }
+
+    private double delta(int n){
+        double gamma = 2 * Math.PI * (n- 1)/365;
+        double delta = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma) - 0.006758 * Math.cos(2*gamma) + 0.000907* Math.sin(2*gamma) - 0.002697* Math.cos(3*gamma)+ 0.00148*Math.sin(3*gamma);
+        return delta;
+    }
+
+
+    private double MaxAlturaSolar(String dia, String lat){
+
+        double maxAltSol = 90 - titaZmin( Integer.parseInt(dia)  , Double.parseDouble(lat));
+        //return Math.toDegrees(maxAltSol);
+
+        return  maxAltSol;
+    }
+
+    private double titaZmin(int n, double lat){
+        return Math.abs(delta(n) - lat);
+    }
+
+
 
 
 
