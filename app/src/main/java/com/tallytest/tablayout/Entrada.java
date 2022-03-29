@@ -28,9 +28,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -593,6 +596,11 @@ public class Entrada extends Fragment {
         lineChartToa.setData(data);
         lineChartToa.getAxisRight().setEnabled(false); // no right axis
         lineChartToa.getAxisLeft().setAxisMaximum(1500);
+
+        YAxis myYAxis = lineChartToa.getAxisLeft();
+        myYAxis.setValueFormatter(new MyYAxisValueFormatter());
+
+
     }
 
 
@@ -616,6 +624,8 @@ public class Entrada extends Fragment {
         lineChartCC.setData(data);
         lineChartCC.getAxisRight().setEnabled(false); // no right axis
         lineChartCC.getAxisLeft().setAxisMaximum(1500);
+        YAxis myYAxis = lineChartCC.getAxisLeft();
+        myYAxis.setValueFormatter(new MyYAxisValueFormatter());
 
 
     }
@@ -1034,4 +1044,23 @@ public class Entrada extends Fragment {
         // cuando lo denegó anteriormente
         Toast.makeText(getContext(), "El permiso para el almacenamiento está denegado", Toast.LENGTH_SHORT).show();
     }
+
+
+    private class MyYAxisValueFormatter extends ValueFormatter {
+
+
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            //return super.getAxisLabel(value, axis);
+            //return value+"Wm2";
+            return  (int)value +" Wm\u00B2";
+        }
+
+
+        @Override
+        public String getFormattedValue(float value) {
+            return super.getFormattedValue(value);
+        }
+    }
+
 }
