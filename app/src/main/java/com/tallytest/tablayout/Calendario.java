@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,11 @@ public class Calendario extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendario, container, false);
 
+        TextView textView10 = view.findViewById(R.id.textView10);
+        textView10.setText("G\u2080:");
+
+
+
         calendarView = view.findViewById(R.id.calendarView);
         dia = view.findViewById(R.id.dia);
         declinacion = view.findViewById(R.id.declinacion);
@@ -100,7 +106,8 @@ public class Calendario extends Fragment {
 
 
 
-        irradianciaNormal.setText(""+ IrraTOAN(diaJuliano()) );
+
+        irradianciaNormal.setText(""+ IrraTOAN(diaJuliano()));
 
         ImageView imageView = view.findViewById(R.id.imgDownload);
 
@@ -164,7 +171,7 @@ public class Calendario extends Fragment {
         String pattern = "#.##";
         DecimalFormat decimalFormat =  new DecimalFormat(pattern);
         String formattedDouble = decimalFormat.format(result);
-        return formattedDouble+" whm2";
+        return formattedDouble+""+"Whm\u00B2";
 
     }
 

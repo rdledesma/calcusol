@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.DeadObjectException;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +77,9 @@ public class Entrada extends Fragment {
 
     private static final int CODIGO_PERMISOS_ALMACENAMIENTO = 2;
     private double latitud, longitud;
-    private int diaJuliano, gmt, beta, gamma, granularidad;
+    private int diaJuliano, gmt, granularidad;
+
+    double beta, gamma;
 
     private ArrayList<Double> irradianciaSolidario = new ArrayList<Double>();
     private ArrayList<Double> irradianciaInclinado = new ArrayList<Double>();
@@ -434,7 +438,7 @@ public class Entrada extends Fragment {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
-                    beta =  Integer.parseInt(String.valueOf(betaEditText.getText()));
+                    beta =  Double.parseDouble(String.valueOf(betaEditText.getText()));
                     loadGrap();
                     updateModelObserver();
                 }
@@ -445,7 +449,7 @@ public class Entrada extends Fragment {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
-                    gamma =  Integer.parseInt(String.valueOf(gammaEditText.getText())) * signoGamma;
+                    gamma =  Double.parseDouble(String.valueOf(gammaEditText.getText())) * signoGamma;
                     loadGrap();
                     updateModelObserver();
                 }
@@ -551,7 +555,7 @@ public class Entrada extends Fragment {
             horaArray.add(""+i);
 
             double irra = irradianciaPlanoParalelo(i);
-            cosTitaZerorray.add(getCosTitaZero(i));
+            cosTitaZerorray.add(getCosTitaZ(i));
             irradianciaSolidario.add(irra);
             paraleloValues.add(new Entry((float) i, (float) irradianciaPlanoParalelo(i)));
         }
@@ -617,33 +621,29 @@ public class Entrada extends Fragment {
     }
 
 
-    public double getCosenoTita(double horaReloj){
+    public double
+    getCosenoTita(double horaReloj){
         double result=0;
 
 
 
-
+        Log.d("beta", ""+beta);
 
         double cosBeta = Math.cos(Math.toRadians(beta));
-        double senBeta = Math.sin(Math.toRadians(gamma));
-
-        double titaZero = Math.acos(getCosTitaZero(horaReloj));
-
-
-
-
+        double senBeta = Math.sin(Math.toRadians(beta));
+        double titaZero = Math.acos(getCosTitaZ(horaReloj));
         double senTitaZero = Math.sin(titaZero);
 
 
 
-        if (getCosTitaZero(horaReloj)<0) {
+        if (getCosTitaZ(horaReloj)<0) {
 
             return 0;
         }
         else{
 
-            //result = getCosTitaZero(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(Gamma);
-            result = getCosTitaZero(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(getAzimutdelSol(horaReloj) - Math.toRadians(gamma));
+            //result = getCosTitaZ(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(Gamma);
+            result = getCosTitaZ(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(getAzimutdelSol(horaReloj) - Math.toRadians(gamma));
 
             return result;
         }
@@ -657,18 +657,18 @@ public class Entrada extends Fragment {
 
         double senLatRad = Math.sin(latitud);
         double senDecRad = Math.sin(Math.toRadians(getDeclinacion()));
-        double titaZ = Math.acos(getCosTitaZero(horaReloj));
+        double titaZ = Math.acos(getCosTitaZ(horaReloj));
 
 
-        result = signo(getW(horaReloj)) * Math.abs(Math.acos((getCosTitaZero(horaReloj)* senLatRad -senDecRad)/ Math.sin(titaZ) * Math.cos(latitud)));
+        result = signo(getW(horaReloj)) * Math.abs(Math.acos((getCosTitaZ(horaReloj)* senLatRad -senDecRad)/ Math.sin(titaZ) * Math.cos(latitud)));
 
         result = signo(getW(horaReloj));
 
-        result = Math.acos(getCosTitaZero(horaReloj)*Math.sin(Math.toRadians(latitud)) - Math.sin(Math.toRadians(getDeclinacion())));
+        result = Math.acos(getCosTitaZ(horaReloj)*Math.sin(Math.toRadians(latitud)) - Math.sin(Math.toRadians(getDeclinacion())));
 
-        result = (getCosTitaZero(horaReloj)*Math.sin(Math.toRadians(latitud) - Math.sin(Math.toRadians(getDeclinacion()))));
+        result = (getCosTitaZ(horaReloj)*Math.sin(Math.toRadians(latitud) - Math.sin(Math.toRadians(getDeclinacion()))));
 
-        double termino1 = (getCosTitaZero(horaReloj)*Math.sin(Math.toRadians(latitud)) - Math.sin(Math.toRadians(getDeclinacion())));
+        double termino1 = (getCosTitaZ(horaReloj)*Math.sin(Math.toRadians(latitud)) - Math.sin(Math.toRadians(getDeclinacion())));
         double termino2 = (Math.sin(titaZ)*Math.cos(Math.toRadians(latitud)));
 
 
@@ -735,15 +735,20 @@ public class Entrada extends Fragment {
 
     private double getHoraSolar(double horaReloj){
 
+        Double mGmt = Double.valueOf(gmt);
 
-        double A = 1;
-        if(gmt<0){
-            A = -1;
+        Double A = 1.0;
+
+        if(mGmt<0){
+            A = -1.0;
         }
 
         Double result;
         //result = horaReloj + (4*((-15 * GMT)-LONG)+getEot())/60;
-        result = horaReloj + (4*((A*15 * gmt)-(A* longitud))+getEot())/60;
+        result = horaReloj + (4*((A*15 * -3.00)-(A * -65.4))+getEot())/60;
+
+
+
         return result;
     }
 
@@ -756,12 +761,12 @@ public class Entrada extends Fragment {
         private double getRazonMediodia(){
         double cosTita, cosTitaZ;
         cosTita = getCosenoTita(mediodiaSolar());
-        cosTitaZ = getCosTitaZero(mediodiaSolar());
+        cosTitaZ = getCosTitaZ(mediodiaSolar());
         if(cosTitaZ>0){
 
             double mediodia = mediodiaSolar();
 
-            return getCosenoTita(truncate(mediodia))/getCosTitaZero(truncate(mediodia));
+            return getCosenoTita(truncate(mediodia))/getCosTitaZ(truncate(mediodia));
         }
         return 0;
 
@@ -777,15 +782,23 @@ public class Entrada extends Fragment {
     }
 
 
-    private double getCosTitaZero(double horaReloj){
+    private double getCosTitaZ(double horaReloj){
 
 
         //Dec bien
         Double DEC = Math.toRadians(getDeclinacion());
+
+        //Angulo MAL
         Double ANG = Math.toRadians(getW(horaReloj));
+
+
+
+        Double COSLAT =  Math.cos(Math.toRadians(latitud));
+        Double SENLAT =  Math.sin(Math.toRadians(latitud));
         Double result;
         //result = (Math.cos(LAT)*Math.cos(DEC)*Math.cos(ANG)) + (Math.sin(Math.toRadians(LAT)) * Math.sin(DEC));
-        result = (Math.cos(Math.toRadians(latitud)) * Math.cos(DEC) *Math.cos(ANG)) + (Math.sin(Math.toRadians(latitud)) * Math.sin(DEC)) ;
+        //result = (Math.cos(Math.toRadians(latitud)) * Math.cos(DEC) *Math.cos(ANG)) + (Math.sin(Math.toRadians(latitud)) * Math.sin(DEC)) ;
+        result = (COSLAT * Math.cos(DEC) * Math.cos(ANG))  + ( SENLAT  * Math.sin(DEC) ) ;
 
         return result;
     }
@@ -793,56 +806,67 @@ public class Entrada extends Fragment {
     private double irradianciaPlanoParalelo(double horaReloj){
 
 
-        if(getCosTitaZero(horaReloj)<0){
+        if(getCosTitaZ(horaReloj)<0){
             return 0;
         }
         else{
-            //return truncate( 1367.00 * gete(DiaJuliano) * getCosTitaZero(13.00));
+            //return truncate( 1367.00 * gete(DiaJuliano) * getCosTitaZ(13.00));
 
 
             double z = 1367.00;
             double e = gete(diaJuliano);
-            double o = getCosTitaZero(horaReloj);
+            double o = getCosTitaZ(horaReloj);
 
             return  truncate(z*e*o);
         }
     }
 
     private double irradianciaPlanoInclinado(double horaReloj){
-
-        if(getCosTitaZero(horaReloj)<0 || getCosenoTita(horaReloj)<0 ){
+        if(getCosTitaZ(horaReloj)<0 || getCosenoTita(horaReloj)<0 ){
             return 0;
         }
         else{
-            return truncate( 1367.00 * gete(diaJuliano) * getCosenoTita(horaReloj));
+            return 1367.00 * gete(diaJuliano) * getCosenoTita(horaReloj);
         }
     }
 
-
     private double masaAire(double horaReloj){
 
+        Double A  = Double.valueOf(altitud);
 
+        Double presion =  288.15/(288.15 - 0.0065 * A);
 
-        Double cosTitaZ = getCosTitaZero(horaReloj);
-
+        Double cosTitaZ = getCosTitaZ(horaReloj);
         Double titaZ = Math.toDegrees(Math.acos(cosTitaZ)) ;
 
+        Double AMk = 1/(cosTitaZ + 0.15 * Math.pow((93.885-  titaZ ), -1.253));
+
+        Double AMc = AMk * presion;
 
 
-        Double med = 0.15 *  Math.pow(93.885 - titaZ, -1.253);
-        return 1 / (cosTitaZ + med);
+        return AMc;
     }
+
+
+
+
 
     private double ktr(){
 
-        double ktr = 0.7 + 1.6391 * Math.pow(10,-3) * Math.pow( altitud , 0.5500);
-        return  ktr;
+        Double A = Double.valueOf(altitud);
+        double ktrp;
+        if(A< 1000.00){
+            ktrp = 0.7570 + 1.0112 * Math.pow(10,-5) * Math.pow( A , 1.1067);
+        }
+        else{
+            ktrp = 0.7 + 1.6391 * Math.pow(10,-3) * Math.pow( A , 0.5500);
+        }
+        return ktrp;
     }
 
 
     private double ghicc(double horaReloj){
-        double med = Math.pow(masaAire(horaReloj), 0.678);
-        return irradianciaPlanoParalelo(horaReloj) * Math.pow(ktr(), med);
+        return irradianciaPlanoParalelo(horaReloj) * Math.pow(ktr(), Math.pow(masaAire(horaReloj), 0.678));
     }
 
 
