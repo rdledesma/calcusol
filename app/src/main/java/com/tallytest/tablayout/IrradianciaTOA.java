@@ -21,6 +21,7 @@ import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 
 public class IrradianciaTOA extends Fragment {
@@ -78,7 +79,14 @@ public class IrradianciaTOA extends Fragment {
 
 
                 TextView alturaSolar = view.findViewById(R.id.alturaSolar);
-                alturaSolar.setText(""+MaxAlturaSolar( model.getDiaJuliano().getValue() , s));
+
+
+                Double result = MaxAlturaSolar( model.getDiaJuliano().getValue() , s);
+                String pattern = "#.##";
+                DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+                String formattedDouble = decimalFormat.format(result);
+                alturaSolar.setText(""+formattedDouble+"°");
+
 
             }
         });
@@ -135,6 +143,37 @@ public class IrradianciaTOA extends Fragment {
                 TextView ocaso = view.findViewById(R.id.ocaso);
                 double hora = Double.parseDouble(s);
                 ocaso.setText(parseToTime(hora) + " hs");
+            }
+        });
+
+
+        model.getRbMediodia().observe(requireActivity(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                TextView rb = view.findViewById(R.id.rbMediodia);
+
+
+                String pattern = "#.##";
+                DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+                String formattedDouble = decimalFormat.format(aDouble);
+                rb.setText(""+formattedDouble);
+            }
+        });
+
+
+
+        model.getRazonI().observe(requireActivity(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                TextView razonI = view.findViewById(R.id.razonI);
+
+
+                String pattern = "#.##";
+                DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+                String formattedDouble = decimalFormat.format(aDouble);
+                razonI.setText(""+formattedDouble);
+
+
             }
         });
 

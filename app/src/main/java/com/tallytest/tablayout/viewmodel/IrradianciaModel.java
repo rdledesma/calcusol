@@ -23,15 +23,29 @@ public class IrradianciaModel extends ViewModel {
     private MutableLiveData<String> maxAlturaSolar = new MutableLiveData<>();
 
     private MutableLiveData<Integer> granularity= new MutableLiveData<>();
-
-
+    private MutableLiveData<Double> rbMediodia= new MutableLiveData<>();
+    private MutableLiveData<Double> razonI = new MutableLiveData<>();
 
     public MutableLiveData<String> getDuracion() {
         return duracion;
     }
 
 
+    public MutableLiveData<Double> getRbMediodia() {
+        return rbMediodia;
+    }
 
+    public void setRbMediodia(Double rbMediodia) {
+        this.rbMediodia.setValue(rbMediodia);
+    }
+
+    public MutableLiveData<Double> getRazonI() {
+        return razonI;
+    }
+
+    public void setRazonI(Double razonI) {
+        this.razonI.setValue(razonI);
+    }
 
     public void setDuracion(String duracion) {
         this.duracion.setValue(duracion);

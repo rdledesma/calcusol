@@ -347,6 +347,7 @@ public class Entrada extends Fragment {
         model.setAmanecer(""+getSalidaSol());
         model.setOcaso(""+getPuestaSol());
         model.setDuracion(""+(getPuestaSol()-getSalidaSol()));
+        model.setRbMediodia(getRazonMediodia());
     }
 
 
@@ -548,7 +549,8 @@ public class Entrada extends Fragment {
 
 
     private void loadGrap() {
-
+        Double sumInclinado = 0.0;
+        Double sumParalelo = 0.0;
 
 
 
@@ -561,6 +563,7 @@ public class Entrada extends Fragment {
             cosTitaZerorray.add(getCosTitaZ(i));
             irradianciaSolidario.add(irra);
             paraleloValues.add(new Entry((float) i, (float) irradianciaPlanoParalelo(i)));
+            sumParalelo = sumParalelo + irradianciaPlanoParalelo(i);
         }
 
 
@@ -571,7 +574,13 @@ public class Entrada extends Fragment {
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
             irradianciaInclinado.add(irradianciaPlanoInclinado(i));
             inclinadoValues.add(new Entry((float) i, (float) irradianciaPlanoInclinado(i)));
+            sumInclinado = sumInclinado + irradianciaPlanoInclinado(i);
         }
+
+
+
+
+        
 
 
         LineDataSet setInclinado = new LineDataSet(inclinadoValues, "Irr. Plano Inclinado");
@@ -599,6 +608,13 @@ public class Entrada extends Fragment {
 
         YAxis myYAxis = lineChartToa.getAxisLeft();
         myYAxis.setValueFormatter(new MyYAxisValueFormatter());
+
+        Double razonSobrePlanos = 0.0;
+        razonSobrePlanos = sumParalelo == 0 ? 0 : sumInclinado/sumParalelo;
+        model.setRazonI(razonSobrePlanos);
+
+
+
 
 
     }
@@ -762,10 +778,23 @@ public class Entrada extends Fragment {
         return result;
     }
 
+
+
+
     private double mediodiaSolar() {
-        return 12 - getHoraSolar(0);
-        //return getHoraSolar(0);
+
+
+        Double LUTC = 15.00 * Double.valueOf(gmt);
+        Double L0 =  Double.valueOf(longitud);
+
+        Double correcion = (LUTC - L0) / 15;
+
+        Double TUTC = 12 + correcion - getEot()/60 ;
+
+        return TUTC;
+
     }
+
 
 
         private double getRazonMediodia(){
@@ -882,51 +911,52 @@ public class Entrada extends Fragment {
 
 
     private double getSalidaSol(){
-        int DiaJuliano =  diaJuliano;
-        double LAT = latitud;
-        double LONG = longitud;
-        double LONGOBS = LONG - (LONG/15);
+
+        Double diaJ= 0.0 + diaJuliano;
+        Double LUTC = 15.00 * gmt;
+        Double L0 = longitud;
+        Double declinacion = Math.toRadians(23.45 * Math.sin(Math.toRadians(360*(284+diaJ))/365));
 
 
-        double GMT= Double.parseDouble(String.valueOf(gmt));
-        double result ,resultParcial, resultRad;
-        Double dec = getDeclinacion();
-        double termino1 =  -Math.tan(Math.toRadians(LAT)) * Math.tan(Math.toRadians(dec.doubleValue()));
-        double ws = Math.toDegrees(Math.acos(termino1));
-        resultParcial =  12- ws/15;
-        double resultts = resultParcial;
-        double resulttsof = resultts - (-1) - (4*(LONGOBS-LONG) + gete(DiaJuliano))/60;
+        Double correcion = (LUTC - L0) / 15;
 
-        //double resulttsof = resultts - (-1) + (4*((1*15 * GMT)-(1*LONG))+gete(DiaJuliano))/60;
-        //double resulttsof = resultts - (-1) + ((4*(15 * GMT)-LONG) +gete(DiaJuliano))/60;
+        //Double wss = Math.acos(- Math.tan(getDeclinacion()) * Math.tan( Math.toRadians(latitud) )) * 180 / Math.PI;
+        //Double ws = Math.acos(-Math.tan( getDeclinacion() ) * (Math.tan(Math.toRadians(-34.90395))));
+        Double ws = -Math.acos(-(Math.tan(declinacion)) * (Math.tan(Math.toRadians(latitud))));
 
-        return resulttsof;
+
+
+        Double TUTC = 12 * (1 + (ws/Math.PI))  + correcion - getEot()/60;
+
+        return TUTC;
 
     }
 
     private double getPuestaSol(){
-        int DiaJuliano =  diaJuliano;
-        double LAT = latitud;
-        double LONG = longitud;
-        double LONGOBS = LONG - (LONG/15);
-        double result ,resultParcial, resultRad;
 
-        Double dec = getDeclinacion();
+        Double diaJ= 0.0 + diaJuliano;
+        Double LUTC = 15.00 * gmt;
+        Double L0 = longitud;
+        Double declinacion = Math.toRadians(23.45 * Math.sin(Math.toRadians(360*(284+diaJ))/365));
 
-        double termino1 =  -Math.tan(Math.toRadians(LAT)) * Math.tan(Math.toRadians(dec.doubleValue()));
-        double ws = Math.toDegrees(Math.acos(termino1));
 
-        resultParcial =  12 + ws/15;
+        Double correcion = (LUTC - L0) / 15;
 
-        double resultts = resultParcial;
-
-        double resulttsof = resultts - (-1) - (4*(LONGOBS-LONG) + gete(DiaJuliano))/60;
+        //Double wss = Math.acos(- Math.tan(getDeclinacion()) * Math.tan( Math.toRadians(latitud) )) * 180 / Math.PI;
+        //Double ws = Math.acos(-Math.tan( getDeclinacion() ) * (Math.tan(Math.toRadians(-34.90395))));
+        Double ws = Math.acos(-(Math.tan(declinacion)) * (Math.tan(Math.toRadians(latitud))));
 
 
 
-        return resulttsof;
+        Double TUTC = 12 * (1 + (ws/Math.PI))  + correcion - getEot()/60;
+
+        return TUTC;
 
     }
+
+
+
+
 
 
     public void ExportExcel(String name){
