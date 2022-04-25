@@ -140,7 +140,7 @@
 
 
                 <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="wrap_content"
+                    android:layout_width="35dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
@@ -199,7 +199,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
-                        android:text="0"
+                        android:text="30"
                         android:textSize="24sp" />
 
 
@@ -235,7 +235,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
-                        android:text="0"
+                        android:text="45"
                         android:textSize="24sp" />
 
 
@@ -255,7 +255,9 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/grap_toa_cc"
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="400dp"
+                android:visibility="gone"
+                >
 
             </com.github.mikephil.charting.charts.LineChart>
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -45,6 +45,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -174,8 +175,8 @@ public class Entrada extends Fragment {
         latitud  =  Double.parseDouble(String.valueOf(latitudEditText.getText()));
         longitud = Double.parseDouble(String.valueOf(longitudEditText.getText()));
         gmt = 0;
-        beta = 0;
-        gamma = 0;
+        beta = Double.parseDouble(String.valueOf(betaEditText.getText()));
+        gamma = Double.parseDouble(String.valueOf(gammaEditText.getText()));
         altitud = 0;
 
         model.getGranularity().observe(requireActivity(), new Observer<Integer>() {
@@ -234,6 +235,7 @@ public class Entrada extends Fragment {
                 progressChangedValue = progress;
                 textAltitud.setText(""+progressChangedValue+" msn");
                 altitud = progressChangedValue;
+                loadGrap();
                 loadGrapCieloClaro();
                 updateModelObserver();
             }
@@ -527,18 +529,6 @@ public class Entrada extends Fragment {
 
 
 
-
-    /*private boolean validateAltitud(){
-
-        Integer Altitud =  Integer.parseInt(String.valueOf(altitud.getText()));
-        if (Altitud< 0 || Altitud>8848){
-            Toast.makeText(getContext(), "Altitud inválida", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }*/
-
-
     private boolean validateInputs(){
         if(validateLatitud() && validateLongitud() && validateBeta() && validateGamma()){
             return true;
@@ -551,7 +541,7 @@ public class Entrada extends Fragment {
     private void loadGrap() {
         Double sumInclinado = 0.0;
         Double sumParalelo = 0.0;
-
+        Double sumArgp = 0.0;
 
 
         lineChartToa.clear();
@@ -568,6 +558,11 @@ public class Entrada extends Fragment {
 
 
         LineDataSet setParaleo = new LineDataSet(paraleloValues, "Irr. Plano Paralelo");
+        setParaleo.setLineWidth(2);
+        setParaleo.setColor(Color.BLUE);
+        setParaleo.setCircleColor(Color.BLUE);
+        setParaleo.setFillColor(Color.BLUE);
+        setParaleo.setCircleHoleColor(Color.BLUE);
         setParaleo.setFillAlpha(100);
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
@@ -580,7 +575,34 @@ public class Entrada extends Fragment {
 
 
 
-        
+        ArrayList<Entry> ghiccValues = new ArrayList<>();
+        for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
+            irradianciaCieloClaro.add(ghicc(i));
+            ghiccValues.add(new Entry((float) i, (float) ghicc(i)));
+
+
+            Float mGHIcc =  (float) ghicc(i);
+
+            String mSum = ""+mGHIcc ;
+
+            if(mSum.equals("NaN")){
+                sumArgp = sumArgp + 0;
+            }
+            else{
+                sumArgp = sumArgp + mGHIcc;
+            }
+
+        }
+
+
+
+        LineDataSet setGHIcc = new LineDataSet(ghiccValues, "GHI CC");
+        setGHIcc.setLineWidth(4);
+        setGHIcc.setColor(Color.parseColor("Green"));
+        setGHIcc.setCircleColor(Color.GREEN);
+        setGHIcc.setFillColor(Color.GREEN);
+        setGHIcc.setCircleHoleColor(Color.GREEN);
+        setGHIcc.setFillAlpha(10);
 
 
         LineDataSet setInclinado = new LineDataSet(inclinadoValues, "Irr. Plano Inclinado");
@@ -596,7 +618,7 @@ public class Entrada extends Fragment {
 
         dataSets.add(setInclinado);
         dataSets.add(setParaleo);
-
+        dataSets.add(setGHIcc);
 
 
 
@@ -612,6 +634,11 @@ public class Entrada extends Fragment {
         Double razonSobrePlanos = 0.0;
         razonSobrePlanos = sumParalelo == 0 ? 0 : sumInclinado/sumParalelo;
         model.setRazonI(razonSobrePlanos);
+
+
+        Double kt =0.0;
+        kt = sumArgp/sumParalelo;
+        model.setKt(kt);
 
 
 
@@ -652,11 +679,12 @@ public class Entrada extends Fragment {
         double result=0;
 
 
+        Double mBeta = Double.valueOf(beta);
+        Double mGamma = Double.valueOf(gamma);
 
-        Log.d("beta", ""+beta);
 
-        double cosBeta = Math.cos(Math.toRadians(beta));
-        double senBeta = Math.sin(Math.toRadians(beta));
+        double cosBeta = Math.cos(Math.toRadians(mBeta));
+        double senBeta = Math.sin(Math.toRadians(mBeta));
         double titaZero = Math.acos(getCosTitaZ(horaReloj));
         double senTitaZero = Math.sin(titaZero);
 
@@ -669,7 +697,7 @@ public class Entrada extends Fragment {
         else{
 
             //result = getCosTitaZ(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(Gamma);
-            result = getCosTitaZ(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(getAzimutdelSol(horaReloj) - Math.toRadians(gamma));
+            result = getCosTitaZ(horaReloj) * cosBeta + senTitaZero * senBeta * Math.cos(getAzimutdelSol(horaReloj) - Math.toRadians(mGamma));
 
             return result;
         }
@@ -869,11 +897,15 @@ public class Entrada extends Fragment {
         }
     }
 
+
+
+
+
     private double masaAire(double horaReloj){
 
         Double A  = Double.valueOf(altitud);
 
-        Double presion =  288.15/(288.15 - 0.0065 * A);
+        Double presion =  Math.pow(288.15/(288.15 - 0.0065 * A), -5.255877);
 
         Double cosTitaZ = getCosTitaZ(horaReloj);
         Double titaZ = Math.toDegrees(Math.acos(cosTitaZ)) ;
@@ -884,6 +916,16 @@ public class Entrada extends Fragment {
 
 
         return AMc;
+    }
+
+    private double masAireKastenYoung(double horaReloj){
+        Double A  = Double.valueOf(altitud);
+        Double cosTitaZ = getCosTitaZ(horaReloj);
+        Double titaZ = Math.toDegrees(Math.acos(cosTitaZ)) ;
+
+        Double AMky = (Math.exp(-0.0001184 *A))/(cosTitaZ + 0.5057 * Math.pow(( 96.080 - titaZ ), -1.634));
+        Double presion =  288.15/(288.15 - 0.0065 * A);
+        return AMky;
     }
 
 
@@ -905,7 +947,19 @@ public class Entrada extends Fragment {
 
 
     private double ghicc(double horaReloj){
-        return irradianciaPlanoParalelo(horaReloj) * Math.pow(ktr(), Math.pow(masaAire(horaReloj), 0.678));
+
+        Double result = 0.0;
+        result = irradianciaPlanoParalelo(horaReloj) * Math.pow(ktr(), Math.pow(masaAire(horaReloj), 0.678));
+
+
+
+        return result;
+        //return irradianciaPlanoParalelo(horaReloj) * Math.pow(ktr(), Math.pow(masAireKastenYoung(horaReloj), 0.678));
+
+
+
+
+
     }
 
 
@@ -1002,6 +1056,9 @@ public class Entrada extends Fragment {
         HSSFCell cellIrradianciaInclinado= rowHeader.createCell(4);
         cellIrradianciaInclinado.setCellValue("Irrad. plano inclinado");
 
+        HSSFCell cellIrradianciaCC= rowHeader.createCell(5);
+        cellIrradianciaCC.setCellValue("Irrad. cc");
+
 
 
         for (int i = 1; i <irradianciaSolidario.size()+1; i=i+1) {
@@ -1013,12 +1070,13 @@ public class Entrada extends Fragment {
             HSSFCell cosTita = hssfRow2.createCell(2);
             HSSFCell irradianciaSolidaria = hssfRow2.createCell(3);
             HSSFCell irradianciaInclinada = hssfRow2.createCell(4);
-
+            HSSFCell irradianciaCC = hssfRow2.createCell(5);
 
             horaCell.setCellValue(horaArray.get(i-1));
             irradianciaSolidaria.setCellValue(irradianciaSolidario.get(i-1));
             cosTitaZero.setCellValue(cosTitaZerorray.get(i-1));
             irradianciaInclinada.setCellValue(irradianciaInclinado.get(i-1));
+            irradianciaCC.setCellValue(irradianciaCieloClaro.get(i-1));
 
         }
 

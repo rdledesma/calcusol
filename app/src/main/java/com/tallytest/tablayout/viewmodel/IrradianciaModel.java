@@ -25,6 +25,16 @@ public class IrradianciaModel extends ViewModel {
     private MutableLiveData<Integer> granularity= new MutableLiveData<>();
     private MutableLiveData<Double> rbMediodia= new MutableLiveData<>();
     private MutableLiveData<Double> razonI = new MutableLiveData<>();
+    private MutableLiveData<Double> kt = new MutableLiveData<>();
+
+
+    public MutableLiveData<Double> getKt() {
+        return kt;
+    }
+
+    public void setKt(Double kt) {
+        this.kt.setValue(kt);
+    }
 
     public MutableLiveData<String> getDuracion() {
         return duracion;

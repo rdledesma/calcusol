@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,13 +141,14 @@ public class Calendario extends Fragment {
                     dia.setText("DIA: ");
                     declinacion.setText("");
                     model.setDiaJuliano(""+1);
-
+                    irradianciaNormal.setText(""+ IrraTOAN(1));
 
                 }
                 else{
                     dia.setText("DIA: "+days);
                     declinacion.setText(""+getDeclinacionSpencer(Integer.parseInt(String.valueOf(days)))+"°");
                     model.setDiaJuliano(""+days);
+                    irradianciaNormal.setText(""+ IrraTOAN((int) days));
                 }
             }
         });
@@ -160,12 +162,14 @@ public class Calendario extends Fragment {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private String IrraTOAN(int n){
         double gamma = 2 * Math.PI * (n - 1)/365;
 
 
-
         double result =  1.000110 + 0.034221*Math.cos(gamma) + 0.001280*Math.sin(gamma) + 0.000719*Math.cos(2*gamma) + 0.000077*Math.sin(2*gamma);
+
+
 
         result = result * 1361;
         String pattern = "#.##";

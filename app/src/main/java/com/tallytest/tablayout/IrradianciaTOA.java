@@ -178,6 +178,18 @@ public class IrradianciaTOA extends Fragment {
         });
 
 
+        model.getKt().observe(requireActivity(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                TextView kt = view.findViewById(R.id.kt);
+                String pattern = "#.##";
+                DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+                String formattedDouble = decimalFormat.format(aDouble);
+                kt.setText(""+formattedDouble);
+            }
+        });
+
+
         ImageView imageView = view.findViewById(R.id.imgDownload);
 
         imageView.setOnClickListener(new View.OnClickListener() {
