@@ -6,6 +6,15 @@ import androidx.lifecycle.ViewModel;
 
 public class IrradianciaModel extends ViewModel {
 
+    private MutableLiveData<Double> irradiacion = new MutableLiveData<>();
+    public MutableLiveData<Double> getIrradiacion() {
+        return irradiacion;
+    }
+
+    public void setIrradiacion(Double irradiacion) {
+        this.irradiacion.setValue(irradiacion);
+    }
+
 
     private MutableLiveData<String> gmt = new MutableLiveData<>();
     private MutableLiveData<String> diaJuliano = new MutableLiveData<>();

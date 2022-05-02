@@ -28,6 +28,10 @@ public class IrradianciaTOA extends Fragment {
 
     private IrradianciaModel model;
 
+
+    private Integer granularity;
+
+
     public IrradianciaTOA() {
         // Required empty public constructor
     }
@@ -52,7 +56,12 @@ public class IrradianciaTOA extends Fragment {
         View view = inflater.inflate(R.layout.fragment_irradiancia_t_o_a, container, false);
 
 
-
+        model.getGranularity().observe(requireActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                granularity = integer;
+            }
+        });
 
 
         model.getDiaJuliano().observe(requireActivity(), new Observer<String>() {
@@ -188,6 +197,19 @@ public class IrradianciaTOA extends Fragment {
                 kt.setText(""+formattedDouble);
             }
         });
+
+        model.getIrradiacion().observe(requireActivity(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                TextView kt = view.findViewById(R.id.irradiacion);
+                String pattern = "#.##";
+                DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+                String formattedDouble = decimalFormat.format(aDouble);
+                kt.setText(""+formattedDouble+" KWh");
+            }
+        });
+
+
 
 
         ImageView imageView = view.findViewById(R.id.imgDownload);

@@ -63,9 +63,10 @@ import static android.os.Environment.DIRECTORY_DOCUMENTS;
  */
 public class Entrada extends Fragment {
 
+    private Double totalGHI;
 
     private TextInputEditText dia, latitudEditText, longitudEditText, betaEditText, gammaEditText;
-    private Button btnLatitud, btnLongitud, btnGamma;
+    private Button btnLatitud, btnLongitud, btnGamma, btnConfirmar;
     private IrradianciaModel model;
     private LineChart lineChartToa, lineChartCC;
     private ArrayList <GmtItem> gmtItems;
@@ -90,7 +91,8 @@ public class Entrada extends Fragment {
     private ArrayList<Double> irradianciaCieloClaro = new ArrayList<Double>();
     private ArrayList<String> horaArray = new ArrayList<String>();
     private ArrayList<Double> cosTitaZerorray = new ArrayList<Double>();
-
+    private ArrayList<Double> cosTitaArray = new ArrayList<Double>();
+    private ArrayList<Double> ktArray = new ArrayList<Double>();
 
 
 
@@ -111,6 +113,7 @@ public class Entrada extends Fragment {
         super.onCreate(savedInstanceState);
         gran  = 5;
         model = new ViewModelProvider(requireActivity()).get(IrradianciaModel.class);
+
     }
 
     @Override
@@ -132,17 +135,8 @@ public class Entrada extends Fragment {
 
     private void setRootView(View view){
 
+        btnConfirmar = view.findViewById(R.id.btnConfirmar);
 
-
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.floating);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                String currentDateandTime = sdf.format(new Date());
-                ExportExcel(currentDateandTime);
-            }
-        });
 
 
         latitudEditText = view.findViewById(R.id.latitud);
@@ -281,7 +275,7 @@ public class Entrada extends Fragment {
             public void onClick(View view) {
 
 
-                switch (gran){
+                /*switch (gran){
                     case 5:
                         granularity.setText("10");
                         model.setGranularity(10);
@@ -297,7 +291,34 @@ public class Entrada extends Fragment {
                         model.setGranularity(5);
                         gran = 5;
                         break;
+                }*/
+
+                switch (gran){
+
+                    case 5:
+                        granularity.setText("10");
+                        model.setGranularity(10);
+                        gran = 10;
+                        break;
+                    case 10:
+                        granularity.setText("15");
+                        model.setGranularity(15);
+                        gran = 15;
+                        break;
+                    case 15:
+                        granularity.setText("1");
+                        model.setGranularity(1);
+                        gran = 1;
+                        break;
+
+                    case 1:
+                        granularity.setText("5");
+                        model.setGranularity(5);
+                        gran = 5;
+                        break;
                 }
+
+                loadGrap();
 
             }
         });
@@ -393,7 +414,12 @@ public class Entrada extends Fragment {
         });
 
 
-
+        btnConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadGrap();
+            }
+        });
 
 
 
@@ -543,6 +569,14 @@ public class Entrada extends Fragment {
         Double sumParalelo = 0.0;
         Double sumArgp = 0.0;
 
+        horaArray.clear();
+        cosTitaZerorray.clear();
+        cosTitaArray.clear();
+        irradianciaSolidario.clear();
+        irradianciaInclinado.clear();
+        irradianciaCieloClaro.clear();
+        ktArray.clear();
+
 
         lineChartToa.clear();
         ArrayList<Entry> paraleloValues = new ArrayList<>();
@@ -568,16 +602,27 @@ public class Entrada extends Fragment {
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
             irradianciaInclinado.add(irradianciaPlanoInclinado(i));
+            cosTitaArray.add(getCosenoTita(i));
+
             inclinadoValues.add(new Entry((float) i, (float) irradianciaPlanoInclinado(i)));
             sumInclinado = sumInclinado + irradianciaPlanoInclinado(i);
+
+
+
         }
 
 
 
-
+        totalGHI = 0.0;
         ArrayList<Entry> ghiccValues = new ArrayList<>();
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
-            irradianciaCieloClaro.add(ghicc(i));
+
+
+
+
+
+
+
             ghiccValues.add(new Entry((float) i, (float) ghicc(i)));
 
 
@@ -585,11 +630,24 @@ public class Entrada extends Fragment {
 
             String mSum = ""+mGHIcc ;
 
+
+
+
+
             if(mSum.equals("NaN")){
                 sumArgp = sumArgp + 0;
+                irradianciaCieloClaro.add(0.0);
+
             }
             else{
                 sumArgp = sumArgp + mGHIcc;
+                irradianciaCieloClaro.add(ghicc(i));
+
+                if(mGHIcc>=0){
+                    totalGHI = totalGHI +   mGHIcc;
+                }
+
+
             }
 
         }
@@ -640,8 +698,17 @@ public class Entrada extends Fragment {
         kt = sumArgp/sumParalelo;
         model.setKt(kt);
 
+        model.setIrradiacion(totalGHI/1000/(60/gran));
 
 
+        int n = irradianciaSolidario.size()-1;
+
+        for (int i=0; i<=n; i++){
+            if(irradianciaSolidario.get(i)!=0){
+                Double result = irradianciaCieloClaro.get(i) / irradianciaSolidario.get(i);
+                ktArray.add(result);
+            }
+        }
 
 
     }
@@ -884,6 +951,8 @@ public class Entrada extends Fragment {
             double e = gete(diaJuliano);
             double o = getCosTitaZ(horaReloj);
 
+
+
             return  truncate(z*e*o);
         }
     }
@@ -1061,6 +1130,8 @@ public class Entrada extends Fragment {
 
 
 
+
+
         for (int i = 1; i <irradianciaSolidario.size()+1; i=i+1) {
             HSSFRow hssfRow2 = hssfSheet.createRow(i);
 
@@ -1072,11 +1143,17 @@ public class Entrada extends Fragment {
             HSSFCell irradianciaInclinada = hssfRow2.createCell(4);
             HSSFCell irradianciaCC = hssfRow2.createCell(5);
 
+
+
+
             horaCell.setCellValue(horaArray.get(i-1));
             irradianciaSolidaria.setCellValue(irradianciaSolidario.get(i-1));
             cosTitaZero.setCellValue(cosTitaZerorray.get(i-1));
+            cosTita.setCellValue(cosTitaArray.get(i-1));
             irradianciaInclinada.setCellValue(irradianciaInclinado.get(i-1));
             irradianciaCC.setCellValue(irradianciaCieloClaro.get(i-1));
+
+
 
         }
 
