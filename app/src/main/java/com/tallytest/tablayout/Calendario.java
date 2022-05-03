@@ -175,7 +175,7 @@ public class Calendario extends Fragment {
         String pattern = "#.##";
         DecimalFormat decimalFormat =  new DecimalFormat(pattern);
         String formattedDouble = decimalFormat.format(result);
-        return formattedDouble+""+"Whm\u00B2";
+        return formattedDouble+" "+"Whm\u00B2";
 
     }
 

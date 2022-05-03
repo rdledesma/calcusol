@@ -14,7 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.DeadObjectException;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -418,6 +421,8 @@ public class Entrada extends Fragment {
             @Override
             public void onClick(View view) {
                 loadGrap();
+                loadGrapCieloClaro();
+                updateModelObserver();
             }
         });
 
@@ -429,7 +434,7 @@ public class Entrada extends Fragment {
 
     private void listenerText(){
 
-
+        /*
         latitudEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -443,48 +448,131 @@ public class Entrada extends Fragment {
 
 
             }
-        });
+        });*/
 
 
 
 
-
+        /*
         longitudEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
                     longitud =  Double.parseDouble(String.valueOf(longitudEditText.getText())) * signoLongitud;;
-                    loadGrap();
-                    loadGrapCieloClaro();
-                    updateModelObserver();
+                    //loadGrap();
+                    //loadGrapCieloClaro();
+                    //updateModelObserver();
                     //loadGrapCieloClaro();
                 }
 
 
             }
         });
+        */
 
 
 
+
+
+        /*
         betaEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
                     beta =  Double.parseDouble(String.valueOf(betaEditText.getText()));
-                    loadGrap();
-                    updateModelObserver();
+                    //loadGrap();
+                    //updateModelObserver();
                 }
             }
-        });
+        }); */
 
+        /*
         gammaEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validateInputs()){
                     gamma =  Double.parseDouble(String.valueOf(gammaEditText.getText())) * signoGamma;
-                    loadGrap();
-                    updateModelObserver();
+                    //loadGrap();
+                    //updateModelObserver();
                 }
+            }
+        });*/
+
+
+        latitudEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(validateInputs()){
+                    latitud =  Double.parseDouble(String.valueOf(latitudEditText.getText())) * signoLatitud;;
+                }
+            }
+        });
+
+        longitudEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(validateInputs()){
+                    longitud =  Double.parseDouble(String.valueOf(longitudEditText.getText())) * signoLongitud;;
+                }
+            }
+        });
+
+
+        betaEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(validateInputs()){
+                    beta =  Double.parseDouble(String.valueOf(betaEditText.getText()));
+                }
+            }
+        });
+
+        gammaEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(validateInputs()){
+                    gamma =  Double.parseDouble(String.valueOf(gammaEditText.getText())) * signoGamma;
+                }
+
             }
         });
 
@@ -866,10 +954,7 @@ public class Entrada extends Fragment {
 
         Double result;
         //result = horaReloj + (4*((-15 * GMT)-LONG)+getEot())/60;
-        result = horaReloj + (4*((A*15 * -3.00)-(A * -65.4))+getEot())/60;
-
-
-
+        result = horaReloj + (4*((A*15 * mGmt   )-(A * longitud))+getEot())/60;
         return result;
     }
 

@@ -267,23 +267,32 @@ public class IrradianciaTOA extends Fragment {
         }
     }
 
-    private double delta(int n){
-        double gamma = 2 * Math.PI * (n- 1)/365;
-        double delta = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma) - 0.006758 * Math.cos(2*gamma) + 0.000907* Math.sin(2*gamma) - 0.002697* Math.cos(3*gamma)+ 0.00148*Math.sin(3*gamma);
-        return delta;
+    private double getDeclinacionSpencer(int diaJuliano){
+        double gamma = 2 * Math.PI * (diaJuliano - 1) / 365;
+
+        double result  = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma) - 0.006758 * Math.cos(2*gamma) + 0.000907 * Math.sin(2*gamma) - 0.002697 * Math.cos(3 * gamma) + 0.00148 * Math.sin(3*gamma);
+
+        result =  Math.toDegrees(result);
+
+
+        return result;
     }
 
 
     private double MaxAlturaSolar(String dia, String lat){
+        double latitud = Double.parseDouble(lat);
+        int mdia = Integer.parseInt(dia);
 
-        double maxAltSol = 90 - titaZmin( Integer.parseInt(dia)  , Double.parseDouble(lat));
-        //return Math.toDegrees(maxAltSol);
+        double maxAltSol = 90 + latitud - getDeclinacionSpencer(mdia);
 
-        return  maxAltSol;
+        return maxAltSol;
+
     }
 
     private double titaZmin(int n, double lat){
-        return Math.abs(delta(n) - lat);
+        return Math.sin(Math.toRadians(getDeclinacionSpencer(n))) * Math.sin(Math.toRadians(lat));
+
+        //return Math.abs(delta(n) - lat);
     }
 
 
