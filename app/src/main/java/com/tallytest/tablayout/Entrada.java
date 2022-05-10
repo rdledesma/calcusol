@@ -56,6 +56,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
@@ -67,7 +68,6 @@ import static android.os.Environment.DIRECTORY_DOCUMENTS;
 public class Entrada extends Fragment {
 
     private Double totalGHI;
-
     private TextInputEditText dia, latitudEditText, longitudEditText, betaEditText, gammaEditText;
     private Button btnLatitud, btnLongitud, btnGamma, btnConfirmar;
     private IrradianciaModel model;
@@ -96,7 +96,7 @@ public class Entrada extends Fragment {
     private ArrayList<Double> cosTitaZerorray = new ArrayList<Double>();
     private ArrayList<Double> cosTitaArray = new ArrayList<Double>();
     private ArrayList<Double> ktArray = new ArrayList<Double>();
-
+    private ArrayList<Double> wArray = new ArrayList<Double>();
 
 
     public Entrada() {
@@ -664,18 +664,25 @@ public class Entrada extends Fragment {
         irradianciaInclinado.clear();
         irradianciaCieloClaro.clear();
         ktArray.clear();
-
+        wArray.clear();
 
         lineChartToa.clear();
         ArrayList<Entry> paraleloValues = new ArrayList<>();
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
-            horaArray.add(""+i);
 
-            double irra = irradianciaPlanoParalelo(i);
-            cosTitaZerorray.add(getCosTitaZ(i));
+
+            double mHora = i;
+            if (granularidad>1){
+                mHora = (i + (0.01666666667 * granularidad/2));
+            }
+
+            horaArray.add(""+mHora);
+            wArray.add(getW(mHora));
+            double irra = irradianciaPlanoParalelo(mHora);
+            cosTitaZerorray.add(getCosTitaZ(mHora));
             irradianciaSolidario.add(irra);
-            paraleloValues.add(new Entry((float) i, (float) irradianciaPlanoParalelo(i)));
-            sumParalelo = sumParalelo + irradianciaPlanoParalelo(i);
+            paraleloValues.add(new Entry((float) mHora, (float) irradianciaPlanoParalelo(mHora)));
+            sumParalelo = sumParalelo + irradianciaPlanoParalelo(mHora);
         }
 
 
@@ -689,11 +696,17 @@ public class Entrada extends Fragment {
 
         ArrayList<Entry> inclinadoValues = new ArrayList<>();
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
-            irradianciaInclinado.add(irradianciaPlanoInclinado(i));
-            cosTitaArray.add(getCosenoTita(i));
+            double mHora = i;
+            if (granularidad>1){
+                mHora = (i + (0.01666666667 * granularidad/2));
+            }
 
-            inclinadoValues.add(new Entry((float) i, (float) irradianciaPlanoInclinado(i)));
-            sumInclinado = sumInclinado + irradianciaPlanoInclinado(i);
+
+            irradianciaInclinado.add(irradianciaPlanoInclinado(mHora));
+            cosTitaArray.add(getCosenoTita(mHora));
+
+            inclinadoValues.add(new Entry((float) mHora, (float) irradianciaPlanoInclinado(mHora)));
+            sumInclinado = sumInclinado + irradianciaPlanoInclinado(mHora);
 
 
 
@@ -706,15 +719,18 @@ public class Entrada extends Fragment {
         for (double i = 0; i <24; i=i+(0.01666666667 * granularidad)) {
 
 
+            double mHora = i;
+            if (granularidad>1){
+                mHora = (i + (0.01666666667 * granularidad/2));
+            }
 
 
 
 
+            ghiccValues.add(new Entry((float) mHora, (float) ghicc(mHora)));
 
-            ghiccValues.add(new Entry((float) i, (float) ghicc(i)));
 
-
-            Float mGHIcc =  (float) ghicc(i);
+            Float mGHIcc =  (float) ghicc(mHora);
 
             String mSum = ""+mGHIcc ;
 
@@ -729,7 +745,7 @@ public class Entrada extends Fragment {
             }
             else{
                 sumArgp = sumArgp + mGHIcc;
-                irradianciaCieloClaro.add(ghicc(i));
+                irradianciaCieloClaro.add(ghicc(mHora));
 
                 if(mGHIcc>=0){
                     totalGHI = totalGHI +   mGHIcc;
@@ -1187,57 +1203,68 @@ public class Entrada extends Fragment {
         File filePath = new File( dir.getPath()+"/"+name+".xls");
 
 
-
-
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Custom Sheet");
 
         HSSFRow rowHeader = hssfSheet.createRow(0);
 
-        HSSFCell hora = rowHeader.createCell(0);
+
+        HSSFCell horaReloj = rowHeader.createCell(0);
+        horaReloj.setCellValue("Hora Reloj (inicio del intervalo)");
+
+        HSSFCell hora = rowHeader.createCell(1);
         hora.setCellValue("Hora");
 
-        HSSFCell cellCosTitaZero = rowHeader.createCell(1);
+        HSSFCell cellWs = rowHeader.createCell(2);
+        cellWs.setCellValue("w");
+
+
+        HSSFCell cellCosTitaZero = rowHeader.createCell(3);
         cellCosTitaZero.setCellValue("Cos Tita Zero");
-
-
-        HSSFCell cellCosTita= rowHeader.createCell(2);
+        HSSFCell cellCosTita= rowHeader.createCell(4);
         cellCosTita.setCellValue("Cos Tita");
 
-        HSSFCell cellIrradianciaSolidaria= rowHeader.createCell(3);
+        HSSFCell cellIrradianciaSolidaria= rowHeader.createCell(5);
         cellIrradianciaSolidaria.setCellValue("Irrad. plano paralelo");
 
-        HSSFCell cellIrradianciaInclinado= rowHeader.createCell(4);
+        HSSFCell cellIrradianciaInclinado= rowHeader.createCell(6);
         cellIrradianciaInclinado.setCellValue("Irrad. plano inclinado");
 
-        HSSFCell cellIrradianciaCC= rowHeader.createCell(5);
+        HSSFCell cellIrradianciaCC= rowHeader.createCell(7);
         cellIrradianciaCC.setCellValue("Irrad. cc");
 
+        ArrayList<String> HoraRelojArray = new ArrayList<String>();
 
+
+        for(int i=0; i< 24 * (60/granularidad) ; i++){
+            HoraRelojArray.add(ConvertMinutesTimeToHHMMString(i*granularidad));
+        }
 
 
 
         for (int i = 1; i <irradianciaSolidario.size()+1; i=i+1) {
             HSSFRow hssfRow2 = hssfSheet.createRow(i);
 
-
-            HSSFCell horaCell = hssfRow2.createCell(0);
-            HSSFCell cosTitaZero = hssfRow2.createCell(1);
-            HSSFCell cosTita = hssfRow2.createCell(2);
-            HSSFCell irradianciaSolidaria = hssfRow2.createCell(3);
-            HSSFCell irradianciaInclinada = hssfRow2.createCell(4);
-            HSSFCell irradianciaCC = hssfRow2.createCell(5);
+            HSSFCell horaRelojCell = hssfRow2.createCell(0);
+            HSSFCell horaCell = hssfRow2.createCell(1);
+            HSSFCell w = hssfRow2.createCell(2);
+            HSSFCell cosTitaZero = hssfRow2.createCell(3);
+            HSSFCell cosTita = hssfRow2.createCell(4);
+            HSSFCell irradianciaSolidaria = hssfRow2.createCell(5);
+            HSSFCell irradianciaInclinada = hssfRow2.createCell(6);
+            HSSFCell irradianciaCC = hssfRow2.createCell(7);
 
 
 
 
             horaCell.setCellValue(horaArray.get(i-1));
+            w.setCellValue(wArray.get(i-1));
             irradianciaSolidaria.setCellValue(irradianciaSolidario.get(i-1));
             cosTitaZero.setCellValue(cosTitaZerorray.get(i-1));
             cosTita.setCellValue(cosTitaArray.get(i-1));
             irradianciaInclinada.setCellValue(irradianciaInclinado.get(i-1));
             irradianciaCC.setCellValue(irradianciaCieloClaro.get(i-1));
-
+            horaRelojCell.setCellValue(HoraRelojArray.get(i-1));
 
 
         }
@@ -1311,6 +1338,15 @@ public class Entrada extends Fragment {
         public String getFormattedValue(float value) {
             return super.getFormattedValue(value);
         }
+    }
+
+    public static String ConvertMinutesTimeToHHMMString(int minutesTime) {
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        df.setTimeZone(timeZone);
+        String time = df.format(new Date(minutesTime * 60 * 1000L));
+
+        return time;
     }
 
 }

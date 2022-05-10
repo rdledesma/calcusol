@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +48,7 @@ public class Calendario extends Fragment {
     private String mParam2;
 
 
-
+    private DatePicker calendar;
     private IrradianciaModel model;
     private CalendarView calendarView;
     private TextView declinacion, dia, irradianciaNormal;
@@ -102,7 +103,9 @@ public class Calendario extends Fragment {
         irradianciaNormal = view.findViewById(R.id.irradianciaNormal);
 
         dia.setText("DIA: "+diaJuliano());
-        declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
+
+        declinacion.setText(diaJuliano()+"°");
+        //declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
         model.setDiaJuliano(""+ diaJuliano());
 
 
