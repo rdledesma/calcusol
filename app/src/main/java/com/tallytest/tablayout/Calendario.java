@@ -1,5 +1,6 @@
 package com.tallytest.tablayout;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -9,30 +10,25 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tallytest.tablayout.viewmodel.IrradianciaModel;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
-
-
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,10 +49,13 @@ public class Calendario extends Fragment {
     private String mParam2;
 
 
-
+    private DatePicker calendar;
     private IrradianciaModel model;
     private CalendarView calendarView;
-    private TextView declinacion, dia;
+
+
+
+    private TextView declinacion, dia, irradianciaNormal;
     long days;
     public Calendario() {
         // Required empty public constructor
@@ -97,18 +96,68 @@ public class Calendario extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendario, container, false);
 
-        calendarView = view.findViewById(R.id.calendarView);
+        TextView textView10 = view.findViewById(R.id.textView10);
+        textView10.setText("G\u2080:");
+
+
+
+
+
+        //calendarView = view.findViewById(R.id.calendarView);
         dia = view.findViewById(R.id.dia);
         declinacion = view.findViewById(R.id.declinacion);
-
-
-        dia.setText("DIA: "+diaJuliano());
-        declinacion.setText(""+getDeclinacionSpencer(diaJuliano())+"°");
-        model.setName(""+ diaJuliano());
+        irradianciaNormal = view.findViewById(R.id.irradianciaNormal);
 
 
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+        calendar = view.findViewById(R.id.calendarView);
+
+
+
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+        dia.setText("DIA "+ calcularDia(year, month, day) );
+        declinacion.setText(""+getDeclinacionSpencer(calcularDia(year, month, day))+"°");
+        model.setDiaJuliano(""+calcularDia(year, month, day) );
+        irradianciaNormal.setText(""+ IrraTOAN(calcularDia(year, month, day)));
+
+
+
+        calendar.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker datePicker, int y, int m, int d) {
+                dia.setText(""+ calcularDia(y,m,d) );
+                declinacion.setText(""+getDeclinacionSpencer(calcularDia(y,m,d))+"°");
+                model.setDiaJuliano(""+calcularDia(y,m,d));
+                irradianciaNormal.setText(""+ IrraTOAN(calcularDia(y,m,d)));
+
+
+            }
+        });
+
+
+
+
+
+
+        ImageView imageView = view.findViewById(R.id.imgDownload);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), DownloadActivity.class));
+            }
+        });
+
+
+
+
+
+
+        /*calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
                 int Year = year;
@@ -127,24 +176,58 @@ public class Calendario extends Fragment {
                     Toast.makeText(getContext(), "Día Inválido", Toast.LENGTH_LONG).show();
                     dia.setText("DIA: ");
                     declinacion.setText("");
-                    model.setName(""+1);
-
+                    model.setDiaJuliano(""+1);
+                    irradianciaNormal.setText(""+ IrraTOAN(1));
 
                 }
                 else{
                     dia.setText("DIA: "+days);
                     declinacion.setText(""+getDeclinacionSpencer(Integer.parseInt(String.valueOf(days)))+"°");
-                    model.setName(""+days);
+                    model.setDiaJuliano(""+days);
+                    irradianciaNormal.setText(""+ IrraTOAN((int) days));
                 }
             }
         });
 
-
+        */
 
         return view;
     }
 
 
+    private double truncate(double num){
+        return Math.floor(num*100) / 100;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Integer calcularDia(int y, int m, int dia){
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/u");
+        String startDate = "1/1/"+y;
+        String endDate = dia+"/"+(m+1)+"/"+y;
+
+        LocalDate startDateValue = LocalDate.parse(startDate, dateFormatter);
+        LocalDate endDateValue = LocalDate.parse(endDate, dateFormatter);
+        return (int) ChronoUnit.DAYS.between(startDateValue, endDateValue) + 1;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private String IrraTOAN(int n){
+        double gamma = 2 * Math.PI * (n - 1)/365;
+
+
+        double result =  1.000110 + 0.034221*Math.cos(gamma) + 0.001280*Math.sin(gamma) + 0.000719*Math.cos(2*gamma) + 0.000077*Math.sin(2*gamma);
+
+
+
+        result = result * 1361;
+        String pattern = "#.##";
+        DecimalFormat decimalFormat =  new DecimalFormat(pattern);
+        String formattedDouble = decimalFormat.format(result);
+        return formattedDouble+" "+"W/m\u00B2";
+
+    }
 
 
     private double getDeclinacionSpencer(int diaJuliano){
@@ -154,37 +237,18 @@ public class Calendario extends Fragment {
 
         result =  Math.toDegrees(result);
 
-        String pattern = "#.###";
+        return truncate(result);
+        /*
+        String pattern = "#.##";
         DecimalFormat decimalFormat =  new DecimalFormat(pattern);
         String formattedDouble = decimalFormat.format(result);
 
-        return Double.parseDouble(formattedDouble);
+        return Double.parseDouble(formattedDouble);*/
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private int diaJuliano(){
-        int diaJuliano;
-
-        long date = calendarView.getDate();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(date);
-        int Year = calendar.get(Calendar.YEAR);
-        int Month = calendar.get(Calendar.MONTH)+1;
-        int Day = calendar.get(Calendar.DAY_OF_MONTH);
-        //customize According to Your requirement
-        String finalDate=Year+"/"+Month+"/"+Day;
 
 
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("d/M/u");
-        String startDate = "1/1/"+Year;
-        String endDate = Day+"/"+Month+"/"+Year;
 
-        LocalDate startDateValue = LocalDate.parse(startDate, dateFormatter);
-        LocalDate endDateValue = LocalDate.parse(endDate, dateFormatter);
-        days = ChronoUnit.DAYS.between(startDateValue, endDateValue) + 1;
-
-        return (int) days;
-    }
 }
