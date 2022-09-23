@@ -112,7 +112,7 @@ public class IrradianciaTOA extends Fragment {
             @Override
             public void onChanged(String s) {
                 TextView altitud = view.findViewById(R.id.altitud);
-                altitud.setText(s+ " m s n m");
+                altitud.setText(s+ " msnm");
             }
         });
 
@@ -205,7 +205,7 @@ public class IrradianciaTOA extends Fragment {
                 String pattern = "#.##";
                 DecimalFormat decimalFormat =  new DecimalFormat(pattern);
                 String formattedDouble = decimalFormat.format(aDouble);
-                kt.setText(""+formattedDouble+" KWh");
+                kt.setText(""+formattedDouble+" KW");
             }
         });
 

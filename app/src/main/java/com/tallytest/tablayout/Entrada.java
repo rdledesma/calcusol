@@ -1,5 +1,6 @@
 package com.tallytest.tablayout;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -116,6 +118,10 @@ public class Entrada extends Fragment {
         super.onCreate(savedInstanceState);
         gran  = 5;
         model = new ViewModelProvider(requireActivity()).get(IrradianciaModel.class);
+
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+
 
     }
 
@@ -1210,27 +1216,52 @@ public class Entrada extends Fragment {
 
 
         HSSFCell horaReloj = rowHeader.createCell(0);
-        horaReloj.setCellValue("Hora Reloj (inicio del intervalo)");
+        horaReloj.setCellValue("Hora local (inicio del intervalo)");
 
         HSSFCell hora = rowHeader.createCell(1);
-        hora.setCellValue("Hora");
+        hora.setCellValue("HLD");
 
-        HSSFCell cellWs = rowHeader.createCell(2);
+
+
+        HSSFCell dia  = rowHeader.createCell(2);
+        dia.setCellValue("Dia J");
+
+        HSSFCell lat = rowHeader.createCell(3);
+        lat.setCellValue("LAT");
+
+        HSSFCell longi = rowHeader.createCell(4);
+        longi.setCellValue("LONG");
+
+        HSSFCell alti = rowHeader.createCell(5);
+        alti.setCellValue("ALT");
+
+
+        HSSFCell betaHS = rowHeader.createCell(6);
+        betaHS.setCellValue("beta");
+
+
+        HSSFCell gammaHS = rowHeader.createCell(7);
+        gammaHS.setCellValue("gamma");
+
+
+        HSSFCell cellWs = rowHeader.createCell(8);
         cellWs.setCellValue("w");
 
 
-        HSSFCell cellCosTitaZero = rowHeader.createCell(3);
-        cellCosTitaZero.setCellValue("Cos Tita Zero");
-        HSSFCell cellCosTita= rowHeader.createCell(4);
+        HSSFCell cellCosTitaZero = rowHeader.createCell(9);
+        cellCosTitaZero.setCellValue("Cos Tita Z");
+
+
+        HSSFCell cellCosTita= rowHeader.createCell(10);
         cellCosTita.setCellValue("Cos Tita");
 
-        HSSFCell cellIrradianciaSolidaria= rowHeader.createCell(5);
+        HSSFCell cellIrradianciaSolidaria= rowHeader.createCell(11);
         cellIrradianciaSolidaria.setCellValue("Irrad. plano paralelo");
 
-        HSSFCell cellIrradianciaInclinado= rowHeader.createCell(6);
+        HSSFCell cellIrradianciaInclinado= rowHeader.createCell(12);
         cellIrradianciaInclinado.setCellValue("Irrad. plano inclinado");
 
-        HSSFCell cellIrradianciaCC= rowHeader.createCell(7);
+        HSSFCell cellIrradianciaCC= rowHeader.createCell(13);
         cellIrradianciaCC.setCellValue("Irrad. cc");
 
         ArrayList<String> HoraRelojArray = new ArrayList<String>();
@@ -1247,12 +1278,19 @@ public class Entrada extends Fragment {
 
             HSSFCell horaRelojCell = hssfRow2.createCell(0);
             HSSFCell horaCell = hssfRow2.createCell(1);
-            HSSFCell w = hssfRow2.createCell(2);
-            HSSFCell cosTitaZero = hssfRow2.createCell(3);
-            HSSFCell cosTita = hssfRow2.createCell(4);
-            HSSFCell irradianciaSolidaria = hssfRow2.createCell(5);
-            HSSFCell irradianciaInclinada = hssfRow2.createCell(6);
-            HSSFCell irradianciaCC = hssfRow2.createCell(7);
+            HSSFCell diaJCell = hssfRow2.createCell(2);
+            HSSFCell latCell = hssfRow2.createCell(3);
+            HSSFCell longCell = hssfRow2.createCell(4);
+            HSSFCell altCell = hssfRow2.createCell(5);
+            HSSFCell betaCell = hssfRow2.createCell(6);
+            HSSFCell gammaCell = hssfRow2.createCell(7);
+
+            HSSFCell w = hssfRow2.createCell(8);
+            HSSFCell cosTitaZero = hssfRow2.createCell(9);
+            HSSFCell cosTita = hssfRow2.createCell(10);
+            HSSFCell irradianciaSolidaria = hssfRow2.createCell(11);
+            HSSFCell irradianciaInclinada = hssfRow2.createCell(12);
+            HSSFCell irradianciaCC = hssfRow2.createCell(13);
 
 
 
@@ -1265,8 +1303,12 @@ public class Entrada extends Fragment {
             irradianciaInclinada.setCellValue(irradianciaInclinado.get(i-1));
             irradianciaCC.setCellValue(irradianciaCieloClaro.get(i-1));
             horaRelojCell.setCellValue(HoraRelojArray.get(i-1));
-
-
+            diaJCell.setCellValue(diaJuliano);
+            latCell.setCellValue(latitud);
+            longCell.setCellValue(longitud);
+            altCell.setCellValue(altitud);
+            betaCell.setCellValue(beta);
+            gammaCell.setCellValue(gamma);
         }
 
 
@@ -1330,7 +1372,7 @@ public class Entrada extends Fragment {
         public String getAxisLabel(float value, AxisBase axis) {
             //return super.getAxisLabel(value, axis);
             //return value+"Wm2";
-            return  (int)value +" Wm\u00B2";
+            return  (int)value +" W/m\u00B2";
         }
 
 

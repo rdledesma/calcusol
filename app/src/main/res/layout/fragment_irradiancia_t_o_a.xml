@@ -192,7 +192,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
-        android:text="Duración astronómica del dia:"
+        android:text="Duración astr. del dia:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
@@ -252,7 +252,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
-        android:text="Razón de Irradiancia sobre planos:"
+        android:text="Razón de Irr. sobre planos:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView22" />

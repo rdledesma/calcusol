@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/design_default_color_primary"
+    android:background="@color/purple_700"
     android:elevation="4dp"
     >
 
@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/imageSave"
             android:layout_width="wrap_content"
-            android:tint="@color/black"
+            android:tint="@color/white"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

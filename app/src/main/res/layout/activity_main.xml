@@ -15,10 +15,12 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabBackground="@color/design_default_color_primary"
-        app:tabSelectedTextColor="@color/black"
+        app:tabBackground="@color/purple_700"
         app:tabTextColor="@color/white"
         app:tabIndicator="@color/white"
+        app:tabIndicatorColor="@color/gray"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorHeight="4dp"
         >
 
 
