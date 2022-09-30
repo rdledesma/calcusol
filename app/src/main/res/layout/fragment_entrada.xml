@@ -34,13 +34,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="Latitud"
+                    android:hint="Latitud(°)"
                     app:layout_constraintEnd_toStartOf="@+id/textDia"
                     app:layout_constraintStart_toEndOf="@+id/btnLatitud"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/latitud"
+                        app:endIconMode="custom"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
@@ -88,7 +90,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="Longitud"
+                    android:hint="Longitud(°)"
                     app:layout_constraintEnd_toStartOf="@+id/textDia"
                     app:layout_constraintStart_toEndOf="@+id/btnLongitud"
                     app:layout_constraintTop_toBottomOf="@+id/textLatitud">
@@ -189,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="Beta"
+                    android:hint="Beta(°)"
                     app:layout_constraintEnd_toStartOf="@+id/textDia"
                     app:layout_constraintStart_toStartOf="@+id/spinner_gmt"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_gmt">
@@ -225,7 +227,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="Gamma"
+                    android:hint="Gamma(°)"
                     app:layout_constraintEnd_toStartOf="@+id/textDia"
                     app:layout_constraintStart_toEndOf="@+id/btnLongitud"
                     app:layout_constraintTop_toBottomOf="@+id/textBeta">
@@ -257,6 +259,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="HORA"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small">
+
+            </TextView>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:layout_width="match_parent"

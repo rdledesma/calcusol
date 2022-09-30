@@ -1227,42 +1227,42 @@ public class Entrada extends Fragment {
         dia.setCellValue("Dia J");
 
         HSSFCell lat = rowHeader.createCell(3);
-        lat.setCellValue("LAT");
+        lat.setCellValue("LAT °");
 
         HSSFCell longi = rowHeader.createCell(4);
-        longi.setCellValue("LONG");
+        longi.setCellValue("LONG °");
 
         HSSFCell alti = rowHeader.createCell(5);
-        alti.setCellValue("ALT");
+        alti.setCellValue("ALT msnm");
 
 
         HSSFCell betaHS = rowHeader.createCell(6);
-        betaHS.setCellValue("beta");
+        betaHS.setCellValue("beta °");
 
 
         HSSFCell gammaHS = rowHeader.createCell(7);
-        gammaHS.setCellValue("gamma");
+        gammaHS.setCellValue("gamma °");
 
 
         HSSFCell cellWs = rowHeader.createCell(8);
-        cellWs.setCellValue("w");
+        cellWs.setCellValue("w (rad)");
 
 
         HSSFCell cellCosTitaZero = rowHeader.createCell(9);
-        cellCosTitaZero.setCellValue("Cos Tita Z");
+        cellCosTitaZero.setCellValue("Cos Tita Z (rad)");
 
 
         HSSFCell cellCosTita= rowHeader.createCell(10);
-        cellCosTita.setCellValue("Cos Tita");
+        cellCosTita.setCellValue("Cos Tita (rad)");
 
         HSSFCell cellIrradianciaSolidaria= rowHeader.createCell(11);
-        cellIrradianciaSolidaria.setCellValue("Irrad. plano paralelo");
+        cellIrradianciaSolidaria.setCellValue("Irrad. plano paralelo "+"W/m\u00B2");
 
         HSSFCell cellIrradianciaInclinado= rowHeader.createCell(12);
-        cellIrradianciaInclinado.setCellValue("Irrad. plano inclinado");
+        cellIrradianciaInclinado.setCellValue("Irrad. plano inclinado "+"W/m\u00B2");
 
         HSSFCell cellIrradianciaCC= rowHeader.createCell(13);
-        cellIrradianciaCC.setCellValue("Irrad. cc");
+        cellIrradianciaCC.setCellValue("Irrad. cc "+ "W/m\u00B2");
 
         ArrayList<String> HoraRelojArray = new ArrayList<String>();
 
@@ -1295,13 +1295,13 @@ public class Entrada extends Fragment {
 
 
 
-            horaCell.setCellValue(horaArray.get(i-1));
-            w.setCellValue(wArray.get(i-1));
-            irradianciaSolidaria.setCellValue(irradianciaSolidario.get(i-1));
-            cosTitaZero.setCellValue(cosTitaZerorray.get(i-1));
-            cosTita.setCellValue(cosTitaArray.get(i-1));
-            irradianciaInclinada.setCellValue(irradianciaInclinado.get(i-1));
-            irradianciaCC.setCellValue(irradianciaCieloClaro.get(i-1));
+            horaCell.setCellValue(truncate(Double.parseDouble(horaArray.get(i-1))));
+            w.setCellValue(truncate(wArray.get(i-1)));
+            irradianciaSolidaria.setCellValue(truncate(irradianciaSolidario.get(i-1)));
+            cosTitaZero.setCellValue(truncate(cosTitaZerorray.get(i-1)));
+            cosTita.setCellValue(truncate(cosTitaArray.get(i-1)));
+            irradianciaInclinada.setCellValue(truncate(irradianciaInclinado.get(i-1)));
+            irradianciaCC.setCellValue(truncate(irradianciaCieloClaro.get(i-1)));
             horaRelojCell.setCellValue(HoraRelojArray.get(i-1));
             diaJCell.setCellValue(diaJuliano);
             latCell.setCellValue(latitud);
