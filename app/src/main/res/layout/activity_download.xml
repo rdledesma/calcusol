@@ -27,7 +27,7 @@
                 android:id="@+id/tvApp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calcusol - Descargas"
+                android:text="CALCUSOL - Descargas"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/white"
                 android:textSize="24sp"

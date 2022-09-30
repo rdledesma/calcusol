@@ -52,7 +52,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:text="App diseñada por Lic. Rubén Darío Ledesma."
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -66,8 +66,8 @@
         android:layout_marginEnd="24dp"
         android:lines="2"
         android:text="Co-autor: \nDr. Germán Ariel Salazar -  Olga de Castro Vilela"
-        android:textSize="16sp"
         android:textAlignment="center"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />

@@ -114,8 +114,8 @@ public class Calendario extends Fragment {
         calendar = view.findViewById(R.id.calendarView);
 
 
-
         Calendar c = Calendar.getInstance();
+
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH);
         int year = c.get(Calendar.YEAR);
